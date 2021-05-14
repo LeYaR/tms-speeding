@@ -3,10 +3,10 @@ package com.tms.speeding.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.VehicleDTO;
-import com.tms.speeding.entities.Vehicle;
-import com.tms.speeding.repos.RegionRepository;
-import com.tms.speeding.repos.VehicleModelRepository;
+import com.tms.speeding.dto.VehicleD;
+import com.tms.speeding.entity.Vehicle;
+import com.tms.speeding.repository.RegionRepository;
+import com.tms.speeding.repository.VehicleModelRepository;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -25,20 +25,20 @@ public class VehicleMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<VehicleDTO> getDtoList(Iterable<Vehicle> list) {
+    public List<VehicleD> toDtoList(Iterable<Vehicle> list) {
        return ((List<Vehicle>) list).stream().map(this::toDto)
                 .collect(Collectors.toList());
 	}
 
-    public VehicleDTO toDto(Vehicle entity) { 
+    public VehicleD toDto(Vehicle entity) { 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        modelMapper.typeMap(Vehicle.class, VehicleDTO.class)
-        .addMappings(m -> m.map(src -> src.getRegion().getId(), VehicleDTO::setRegion))
-        .addMappings(m -> m.map(src -> src.getModel().getId(), VehicleDTO::setModel));
-		return modelMapper.map(entity, VehicleDTO.class);
+        modelMapper.typeMap(Vehicle.class, VehicleD.class)
+        .addMappings(m -> m.map(src -> src.getRegion().getId(), VehicleD::setRegion))
+        .addMappings(m -> m.map(src -> src.getModel().getId(), VehicleD::setModel));
+		return modelMapper.map(entity, VehicleD.class);
     }
 
-    public Vehicle toEntity(VehicleDTO entity) {
+    public Vehicle toEntity(VehicleD entity) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         Vehicle result = modelMapper.map(entity, Vehicle.class);
         if (entity.getRegion() != null) {

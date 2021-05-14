@@ -3,9 +3,9 @@ package com.tms.speeding.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.RegionDTO;
-import com.tms.speeding.entities.Region;
-import com.tms.speeding.repos.CountryRepository;
+import com.tms.speeding.dto.RegionD;
+import com.tms.speeding.entity.Region;
+import com.tms.speeding.repository.CountryRepository;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -21,19 +21,19 @@ public class RegionMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<RegionDTO> getDtoList(Iterable<Region> list) {
+    public List<RegionD> toDtoList(Iterable<Region> list) {
        return ((List<Region>) list).stream().map(this::toDto)
                 .collect(Collectors.toList());
 	}
 
-    public RegionDTO toDto(Region entity) { 
+    public RegionD toDto(Region entity) { 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        modelMapper.typeMap(Region.class, RegionDTO.class)
-        .addMappings(m -> m.map(src -> src.getCountry().getId(), RegionDTO::setCountry));
-		return modelMapper.map(entity, RegionDTO.class);
+        modelMapper.typeMap(Region.class, RegionD.class)
+        .addMappings(m -> m.map(src -> src.getCountry().getId(), RegionD::setCountry));
+		return modelMapper.map(entity, RegionD.class);
     }
 
-    public Region toEntity(RegionDTO entity) {
+    public Region toEntity(RegionD entity) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         Region result = modelMapper.map(entity, Region.class);
         if (entity.getCountry() != null) {

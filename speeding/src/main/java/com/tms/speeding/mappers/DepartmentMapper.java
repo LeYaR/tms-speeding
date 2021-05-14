@@ -3,8 +3,8 @@ package com.tms.speeding.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.DepartmentDTO;
-import com.tms.speeding.entities.Department;
+import com.tms.speeding.dto.DepartmentD;
+import com.tms.speeding.entity.Department;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -16,17 +16,17 @@ public class DepartmentMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<DepartmentDTO> getDtoList(Iterable<Department> list) {
+    public List<DepartmentD> toDtoList(Iterable<Department> list) {
        return ((List<Department>) list).stream().map(this::toDto)
                 .collect(Collectors.toList());
 	}
 
-    private DepartmentDTO toDto(Department entity) { 
+    private DepartmentD toDto(Department entity) { 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return modelMapper.map(entity, DepartmentDTO.class);
+		return modelMapper.map(entity, DepartmentD.class);
     }
 
-    public Department toEntity(DepartmentDTO entity) { 
+    public Department toEntity(DepartmentD entity) { 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 		return modelMapper.map(entity, Department.class);
     }

@@ -3,11 +3,11 @@ package com.tms.speeding.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.InspectorDTO;
-import com.tms.speeding.entities.Inspector;
-import com.tms.speeding.repos.DepartmentRepository;
-import com.tms.speeding.repos.PersonRepository;
-import com.tms.speeding.repos.RankRepository;
+import com.tms.speeding.dto.InspectorD;
+import com.tms.speeding.entity.Inspector;
+import com.tms.speeding.repository.DepartmentRepository;
+import com.tms.speeding.repository.PersonRepository;
+import com.tms.speeding.repository.RankRepository;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -28,21 +28,21 @@ public class InspectorMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<InspectorDTO> getDtoList(Iterable<Inspector> list) {
+    public List<InspectorD> toDtoList(Iterable<Inspector> list) {
        return ((List<Inspector>) list).stream().map(this::toDto)
                 .collect(Collectors.toList());
 	}
 
-    public InspectorDTO toDto(Inspector entity) { 
+    public InspectorD toDto(Inspector entity) { 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        modelMapper.typeMap(Inspector.class, InspectorDTO.class)
-        .addMappings(m -> m.map(src -> src.getPerson().getId(), InspectorDTO::setPerson))
-        .addMappings(m -> m.map(src -> src.getRank().getId(), InspectorDTO::setRank))
-        .addMappings(m -> m.map(src -> src.getDepartment().getId(), InspectorDTO::setDepartment));
-		return modelMapper.map(entity, InspectorDTO.class);
+        modelMapper.typeMap(Inspector.class, InspectorD.class)
+        .addMappings(m -> m.map(src -> src.getPerson().getId(), InspectorD::setPerson))
+        .addMappings(m -> m.map(src -> src.getRank().getId(), InspectorD::setRank))
+        .addMappings(m -> m.map(src -> src.getDepartment().getId(), InspectorD::setDepartment));
+		return modelMapper.map(entity, InspectorD.class);
     }
 
-    public Inspector toEntity(InspectorDTO entity) {
+    public Inspector toEntity(InspectorD entity) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         Inspector result = modelMapper.map(entity, Inspector.class);
         if (entity.getPerson() != null) {
