@@ -42,7 +42,7 @@ public class Violation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "caught_by", referencedColumnName = "id", nullable = false)
-    private Person inspector;
+    private Inspector inspector;
 
     @Column(name="is_repaid")
     private boolean isRepaid;
@@ -106,11 +106,11 @@ public class Violation {
         this.vehicle = vehicle;
     }
 
-    public Person getInspector() {
+    public Inspector getInspector() {
         return inspector;
     }
 
-    public void setInspector(Person inspector) {
+    public void setInspector(Inspector inspector) {
         this.inspector = inspector;
     }
 
@@ -130,5 +130,4 @@ public class Violation {
         this.note = note;
     }
 
-    
 }

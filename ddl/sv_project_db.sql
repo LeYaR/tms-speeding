@@ -104,8 +104,17 @@ create table sv_violations (
 	foreign key (region_id) references sv_regions(id) on delete set null,
 	foreign key (guilty_id) references sv_people(id) on delete cascade,
 	foreign key (vehicle_id) references sv_vehicles(id) on delete cascade,
-	foreign key (caught_by) references sv_people(id) on delete cascade
+	foreign key (caught_by) references sv_inspectors(id) on delete cascade
 );
+
+
+-- insert into sv_countries (title, iso) values ('Беларусь', 'BLR'); 
+-- insert into sv_regions (title, country_id) values ('Минская область', 1);
+-- insert into sv_vehicle_marks (title) values ('Reno');
+-- insert into sv_vehicle_models (title, mark_id) values ('Logan', 1);
+-- insert into sv_ranks (title) values ('some rank');
+-- insert into sv_departments (title, address) values ('NYPD', '1 Police Plaza - New York, NY');
+-- insert into sv_people ()
 
 -- grant all on sv_project_db.* to sys;
 -- select table_name from information_schema.tables where table_type = 'BASE TABLE' and table_schema = 'sv_project_db';

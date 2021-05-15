@@ -3,7 +3,6 @@ package com.tms.speeding.util;
 public class ResponseObject {
     private boolean success;
     private String type;
-    private Object data;
     private String message;
 
     public ResponseObject() {
@@ -12,16 +11,18 @@ public class ResponseObject {
         this.message = "Ok";
     }
 
-    public ResponseObject(Object data) {
-        this();
-        this.data = data;
+    public ResponseObject(String message) {
+        this.message = message;
     }
 
-    public ResponseObject(boolean success, String type, Object data, String message) {
-        this.success = success;
+    public ResponseObject(String type, String message) {
+        this(message);
         this.type = type;
-        this.data = data;
-        this.message = message;
+    }
+
+    public ResponseObject(boolean success, String type, String message) {
+        this(type, message);
+        this.success = success;
     }
 
     public boolean isSuccess() {
@@ -38,14 +39,6 @@ public class ResponseObject {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
     }
 
     public String getMessage() {

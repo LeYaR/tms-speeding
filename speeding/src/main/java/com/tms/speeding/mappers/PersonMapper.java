@@ -8,27 +8,28 @@ import com.tms.speeding.entity.Person;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class PersonMapper {
    
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper mapper;
+
+    public PersonMapper(ModelMapper mapper) {
+        this.mapper = mapper;
+    }
 
     public List<PersonD> toDtoList(Iterable<Person> list) {
-       return ((List<Person>) list).stream().map(this::toDto)
-                .collect(Collectors.toList());
+       return ((List<Person>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
     public PersonD toDto(Person entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return modelMapper.map(entity, PersonD.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+		return mapper.map(entity, PersonD.class);
     }
 
     public Person toEntity(PersonD entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return modelMapper.map(entity, Person.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+		return mapper.map(entity, Person.class);
     }
 }

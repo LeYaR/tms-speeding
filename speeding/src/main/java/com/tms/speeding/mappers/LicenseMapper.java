@@ -9,34 +9,35 @@ import com.tms.speeding.repository.PersonRepository;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class LicenseMapper {
-    @Autowired
-    private PersonRepository personRepository;
-    
-    @Autowired
-    private ModelMapper modelMapper;
+
+    private final ModelMapper mapper;
+    private final PersonRepository pRepository;
+
+    public LicenseMapper(ModelMapper mapper, PersonRepository pRepository) {
+        this.mapper = mapper;
+        this.pRepository = pRepository;
+    }
 
     public List<LicenseD> toDtoList(Iterable<License> list) {
-       return ((List<License>) list).stream().map(this::toDto)
-                .collect(Collectors.toList());
+       return ((List<License>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
     public LicenseD toDto(License entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        modelMapper.typeMap(License.class, LicenseD.class)
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        mapper.typeMap(License.class, LicenseD.class)
         .addMappings(m -> m.map(src -> src.getPerson().getId(), LicenseD::setPerson));
-		return modelMapper.map(entity, LicenseD.class);
+		return mapper.map(entity, LicenseD.class);
     }
 
     public License toEntity(LicenseD entity) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        License result = modelMapper.map(entity, License.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        License result = mapper.map(entity, License.class);
         if (entity.getPerson() != null) {
-            result.setPerson(personRepository.findById(entity.getPerson()).orElse(null));
+            result.setPerson(pRepository.findById(entity.getPerson()).orElse(null));
         }        
 		return result;
     }

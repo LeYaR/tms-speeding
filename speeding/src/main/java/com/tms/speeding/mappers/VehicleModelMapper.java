@@ -9,35 +9,35 @@ import com.tms.speeding.repository.VehicleMarkRepository;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class VehicleModelMapper {
 
-    @Autowired
-    private VehicleMarkRepository markRepository;
-    
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper mapper;
+    private final VehicleMarkRepository vRepository;
+
+    public VehicleModelMapper(ModelMapper mapper, VehicleMarkRepository vRepository) {
+        this.mapper = mapper;
+        this.vRepository = vRepository;
+    }
 
     public List<VehicleModelD> toDtoList(Iterable<VehicleModel> list) {
-       return ((List<VehicleModel>) list).stream().map(this::toDto)
-                .collect(Collectors.toList());
+       return ((List<VehicleModel>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
     public VehicleModelD toDto(VehicleModel entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        modelMapper.typeMap(VehicleModel.class, VehicleModelD.class)
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        mapper.typeMap(VehicleModel.class, VehicleModelD.class)
         .addMappings(m -> m.map(src -> src.getMark().getId(), VehicleModelD::setMark));
-		return modelMapper.map(entity, VehicleModelD.class);
+		return mapper.map(entity, VehicleModelD.class);
     }
 
     public VehicleModel toEntity(VehicleModelD entity) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        VehicleModel result = modelMapper.map(entity, VehicleModel.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        VehicleModel result = mapper.map(entity, VehicleModel.class);
         if (entity.getMark() != null) {
-            result.setMark(markRepository.findById(entity.getMark()).orElse(null));
+            result.setMark(vRepository.findById(entity.getMark()).orElse(null));
         }        
 		return result;
     }

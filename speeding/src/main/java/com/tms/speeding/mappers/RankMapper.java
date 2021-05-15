@@ -8,26 +8,28 @@ import com.tms.speeding.entity.Rank;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class RankMapper {
-    @Autowired
-    private ModelMapper modelMapper;
+
+    private final ModelMapper mapper;
+
+    public RankMapper(ModelMapper mapper) {
+        this.mapper = mapper;
+    }
 
     public List<RankD> toDtoList(Iterable<Rank> list) {
-       return ((List<Rank>) list).stream().map(this::toDto)
-                .collect(Collectors.toList());
+       return ((List<Rank>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
     private RankD toDto(Rank entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return modelMapper.map(entity, RankD.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+		return mapper.map(entity, RankD.class);
     }
 
     public Rank toEntity(RankD entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return modelMapper.map(entity, Rank.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+		return mapper.map(entity, Rank.class);
     }
 }

@@ -2,21 +2,21 @@ package com.tms.speeding.dto;
 
 public class InspectorD {
     private Integer id;
-    private Integer person;
+    private PersonD person;
     private String badgeNumber;
     private Integer rank;
     private Integer department;
-
+    
     public Integer getId() {
         return id;
     }
     public void setId(Integer id) {
         this.id = id;
     }
-    public Integer getPerson() {
+    public PersonD getPerson() {
         return person;
     }
-    public void setPerson(Integer person) {
+    public void setPerson(PersonD person) {
         this.person = person;
     }
     public String getBadgeNumber() {
@@ -37,5 +37,6 @@ public class InspectorD {
     public void setDepartment(Integer department) {
         this.department = department;
     }
+
     
 }

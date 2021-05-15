@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="sv_region")
+@Table(name="sv_regions")
 public class Region {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

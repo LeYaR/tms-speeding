@@ -1,12 +1,13 @@
 package com.tms.speeding.service;
 
-import java.util.Date;
 import java.util.Optional;
 
 import com.tms.speeding.dto.PersonD;
 import com.tms.speeding.entity.Person;
 import com.tms.speeding.mappers.PersonMapper;
 import com.tms.speeding.repository.PersonRepository;
+import com.tms.speeding.util.Auxiliary;
+import com.tms.speeding.util.ResponseObject;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -43,15 +44,28 @@ public class PersonService {
         return mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
     }
 
-    public PersonD save(PersonD entity) {
-        String lastName = entity.getLastName();
-        String firstName = entity.getFirstName();
-        Date bornDate = entity.getBornDate();
-        String personlNumber = entity.getPersonalNumber();
-        Optional<Person> person = repository.findByAll(lastName, firstName, bornDate, personlNumber);
-        if (person.isPresent()) {
-            return mapper.toDto(person.get());
+    private boolean validate(PersonD object) {
+        return !Auxiliary.isEmpty(object.getLastName()) &&
+               !Auxiliary.isEmpty(object.getFirstName()) &&
+               object.getBornDate() != null;
+    }
+
+    public ResponseObject save(PersonD object) {
+        if (!validate(object)) {
+            return new ResponseObject(false, "error", Auxiliary.SV_INVALID);
         }
-        return mapper.toDto(repository.save(mapper.toEntity(entity)));
+        Optional<Person> entity = repository.findByAll(object);
+        ResponseObject result = new ResponseObject();
+        if (entity.isPresent()) {
+            final int id = entity.get().getId();
+            if (object.getId() != null && object.getId() != id) {
+                return new ResponseObject("warning", Auxiliary.SV_EXISTS);
+            } else if (object.getId() == null) {
+                result = new ResponseObject("warning", Auxiliary.SV_OVERWRITTEN);
+            }
+            object.setId(id);
+        }
+        repository.save(mapper.toEntity(object));
+        return result;
     }
 }

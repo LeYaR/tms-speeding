@@ -28,7 +28,7 @@ public class Person {
     @Column(name="middle_name", length = 50, nullable = false)
     private String middleName;
 
-    @Column(name="born")
+    @Column(name="born", nullable = false)
     private Date bornDate;
 
     @Column(name="identification_number", length = 14)

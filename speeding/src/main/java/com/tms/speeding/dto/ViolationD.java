@@ -11,9 +11,9 @@ public class ViolationD {
     private Integer region;
     private Integer speedLimit;
     private Integer actualSpeed;
-    private Integer guilty;
-    private Integer vehicle;
-    private Integer inspector;
+    private PersonD guilty;
+    private VehicleD vehicle;
+    private InspectorD inspector;
     private boolean isRepaid;
     private String note;
     
@@ -47,22 +47,22 @@ public class ViolationD {
     public void setActualSpeed(Integer actualSpeed) {
         this.actualSpeed = actualSpeed;
     }
-    public Integer getGuilty() {
+    public PersonD getGuilty() {
         return guilty;
     }
-    public void setGuilty(Integer guilty) {
+    public void setGuilty(PersonD guilty) {
         this.guilty = guilty;
     }
-    public Integer getVehicle() {
+    public VehicleD getVehicle() {
         return vehicle;
     }
-    public void setVehicle(Integer vehicle) {
+    public void setVehicle(VehicleD vehicle) {
         this.vehicle = vehicle;
     }
-    public Integer getInspector() {
+    public InspectorD getInspector() {
         return inspector;
     }
-    public void setInspector(Integer inspector) {
+    public void setInspector(InspectorD inspector) {
         this.inspector = inspector;
     }
     public boolean isRepaid() {
@@ -77,6 +77,6 @@ public class ViolationD {
     public void setNote(String note) {
         this.note = note;
     }
-
+        
     
 }

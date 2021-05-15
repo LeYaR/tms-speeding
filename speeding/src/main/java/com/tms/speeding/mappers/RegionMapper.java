@@ -9,35 +9,35 @@ import com.tms.speeding.repository.CountryRepository;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class RegionMapper {
 
-    @Autowired
-    private CountryRepository countryRepository;
-    
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper mapper;
+    private final CountryRepository cRepository;
+
+    public RegionMapper(ModelMapper mapper, CountryRepository cRepository) {
+        this.mapper = mapper;
+        this.cRepository = cRepository;
+    }
 
     public List<RegionD> toDtoList(Iterable<Region> list) {
-       return ((List<Region>) list).stream().map(this::toDto)
-                .collect(Collectors.toList());
+       return ((List<Region>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
     public RegionD toDto(Region entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        modelMapper.typeMap(Region.class, RegionD.class)
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        mapper.typeMap(Region.class, RegionD.class)
         .addMappings(m -> m.map(src -> src.getCountry().getId(), RegionD::setCountry));
-		return modelMapper.map(entity, RegionD.class);
+		return mapper.map(entity, RegionD.class);
     }
 
     public Region toEntity(RegionD entity) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        Region result = modelMapper.map(entity, Region.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        Region result = mapper.map(entity, Region.class);
         if (entity.getCountry() != null) {
-            result.setCountry(countryRepository.findById(entity.getCountry()).orElse(null));
+            result.setCountry(cRepository.findById(entity.getCountry()).orElse(null));
         }        
 		return result;
     }

@@ -1,8 +1,8 @@
 package com.tms.speeding.repository;
 
-import java.util.Date;
 import java.util.Optional;
 
+import com.tms.speeding.dto.PersonD;
 import com.tms.speeding.entity.Person;
 
 import org.springframework.data.domain.Page;
@@ -21,10 +21,11 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Int
                         + " or date_format(born, '%d-%m-%Y') like %?1%";
     
     final String QUERY_CHECK = "select * from sv_people where"
-                        + " lower(last_name) = lower(:last_name)"
-                        + " and lower(first_name) = lower(:first_name)"
-                        + " and date_format(born, '%d-%m-%Y') = date_format(:born_date, '%d-%m-%Y')"
-                        + " or lower(identification_number) = :personal_number limit 1";
+                        + " lower(last_name) = lower(?#{#person.lastName})"
+                        + " and lower(first_name) = lower(?#{#person.firstName})"
+                        + " and date_format(born, '%d-%m-%Y') = date_format(?#{#person.bornDate}, '%d-%m-%Y')"
+                        + " or lower(identification_number) = lower(?#{#person.personalNumber}) limit 1"
+                        + " or id = ?#{#person.id} limit 1";
 
     @Query(value = "select *" + QUERY_BASE, nativeQuery = true)
     Iterable<Person> findByAll(String search);
@@ -33,9 +34,6 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Int
     Page<Person> findByAll(String search, Pageable pageable);
 
     @Query(value = QUERY_CHECK, nativeQuery = true)
-    Optional<Person> findByAll(@Param("last_name") String lastName,
-                               @Param("first_name") String firstName,
-                               @Param("born_date") Date bornDate,
-                               @Param("personal_number") String personalNumber);
+    Optional<Person> findByAll(@Param("person") PersonD person);
 
 }

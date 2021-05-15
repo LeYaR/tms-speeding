@@ -3,62 +3,84 @@ package com.tms.speeding.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.tms.speeding.dto.InspectorD;
+import com.tms.speeding.dto.PersonD;
+import com.tms.speeding.dto.VehicleD;
 import com.tms.speeding.dto.ViolationD;
 import com.tms.speeding.entity.Violation;
+import com.tms.speeding.repository.InspectorRepository;
 import com.tms.speeding.repository.PersonRepository;
 import com.tms.speeding.repository.RegionRepository;
 import com.tms.speeding.repository.VehicleRepository;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class ViolationMapper {
-    @Autowired
-    private PersonRepository personRepository;
 
-    @Autowired
-    private VehicleRepository vehicleRepository;
+    private final ModelMapper mapper;
+    private final InspectorMapper iMapper;
+    private final VehicleMapper vMapper;
+    private final PersonMapper pMapper;
+    private final InspectorRepository iRepository;
+    private final PersonRepository pRepository;
+    private final RegionRepository rRepository;
+    private final VehicleRepository vRepository;
 
-    @Autowired
-    private RegionRepository regionRepository;
-    
-    @Autowired
-    private ModelMapper modelMapper;
+    public ViolationMapper(ModelMapper mapper,
+                           InspectorMapper iMapper,
+                           PersonMapper pMapper,
+                           VehicleMapper vMapper,
+                           PersonRepository pRepository,
+                           InspectorRepository iRepository,
+                           RegionRepository rRepository,
+                           VehicleRepository vRepository) {
+        this.mapper = mapper;
+        this.iMapper = iMapper;
+        this.pMapper = pMapper;
+        this.vMapper = vMapper;
+        this.iRepository = iRepository;
+        this.pRepository = pRepository;
+        this.rRepository = rRepository;
+        this.vRepository = vRepository;
+    }
 
-    public List<ViolationD> getDtoList(Iterable<Violation> list) {
+    public List<ViolationD> toDtoList(Iterable<Violation> list) {
        return ((List<Violation>) list).stream().map(this::toDto)
                 .collect(Collectors.toList());
 	}
+    
 
     public ViolationD toDto(Violation entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        modelMapper.typeMap(Violation.class, ViolationD.class)
-        .addMappings(m -> m.map(src -> src.getGuilty().getId(), ViolationD::setGuilty))
-        .addMappings(m -> m.map(src -> src.getInspector().getId(), ViolationD::setInspector))
-        .addMappings(m -> m.map(src -> src.getVehicle().getId(), ViolationD::setVehicle))
+        final InspectorD inspector = iMapper.toDto(entity.getInspector());
+        final PersonD guilty = pMapper.toDto(entity.getGuilty());
+        final VehicleD vehicle = vMapper.toDto(entity.getVehicle());
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        mapper.typeMap(Violation.class, ViolationD.class)
+        .addMappings(m -> m.map(src -> inspector, ViolationD::setInspector))
+        .addMappings(m -> m.map(src -> guilty, ViolationD::setGuilty))
+        .addMappings(m -> m.map(src -> vehicle, ViolationD::setVehicle))
         .addMappings(m -> m.map(src -> src.getRegion().getId(), ViolationD::setRegion));
-		return modelMapper.map(entity, ViolationD.class);
+		return mapper.map(entity, ViolationD.class);
     }
 
     public Violation toEntity(ViolationD entity) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        Violation result = modelMapper.map(entity, Violation.class);
-        if (entity.getGuilty() != null) {
-            result.setGuilty(personRepository.findById(entity.getGuilty()).orElse(null));
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        Violation result = mapper.map(entity, Violation.class);
+        if (entity.getGuilty() != null && entity.getGuilty().getId() != null) {
+            result.setGuilty(pRepository.findById(entity.getGuilty().getId()).orElse(null));
         }
-        if (entity.getInspector() != null) {
-            result.setInspector(personRepository.findById(entity.getInspector()).orElse(null));
+        if (entity.getInspector() != null && entity.getInspector().getId() != null) {
+            result.setInspector(iRepository.findById(entity.getInspector().getId()).orElse(null));
         }
-        if (entity.getVehicle() != null) {
-            result.setVehicle(vehicleRepository.findById(entity.getVehicle()).orElse(null));
+        if (entity.getVehicle() != null && entity.getVehicle().getId() != null) {
+            result.setVehicle(vRepository.findById(entity.getVehicle().getId()).orElse(null));
         }
         if (entity.getRegion() != null) {
-            result.setRegion(regionRepository.findById(entity.getRegion()).orElse(null));
+            result.setRegion(rRepository.findById(entity.getRegion()).orElse(null));
         }
-        
 		return result;
     }
 }

@@ -2,8 +2,8 @@ package com.tms.speeding.controller;
 
 import com.tms.speeding.dto.PersonD;
 import com.tms.speeding.service.PersonService;
+import com.tms.speeding.util.ResponseObject;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,28 +20,28 @@ public class PersonController {
         this.service = service;
     }
 
-    @GetMapping
+    @PostMapping
     public Iterable<PersonD> getAll() {
         return service.getAll();
     }
 
-    @GetMapping(params = {"id"})
+    @PostMapping(params = {"id"})
     public PersonD getAllById(@RequestParam(value = "id", defaultValue = "0") Integer id) {
         return service.getById(id);
     }
     
-    @GetMapping(params = {"search"})
+    @PostMapping(params = {"search"})
 	public Iterable<PersonD> getAllByString(String search) {
         return service.getAllByString(search);
 	}
 
-    @GetMapping(params = {"page"})
+    @PostMapping(params = {"page"})
 	public Iterable<PersonD> getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return service.getAllByPage(page, limit);
 	}
 
-    @GetMapping(params = {"search", "page"})
+    @PostMapping(params = {"search", "page"})
 	public Iterable<PersonD> getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                    @RequestParam(value = "limit", defaultValue = "20") Integer limit,
                                                    String search) {
@@ -49,8 +49,8 @@ public class PersonController {
 	}
 
     @PostMapping(path="/save")
-    public PersonD save(@RequestBody PersonD person) {
-        return service.save(person);
+    public ResponseObject save(@RequestBody PersonD object) {
+        return service.save(object);
     }
 
 }

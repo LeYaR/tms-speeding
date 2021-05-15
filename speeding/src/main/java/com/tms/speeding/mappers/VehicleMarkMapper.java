@@ -8,27 +8,28 @@ import com.tms.speeding.entity.VehicleMark;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class VehicleMarkMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper mapper;
+
+    public VehicleMarkMapper(ModelMapper mapper) {
+        this.mapper = mapper;
+    }
 
     public List<VehicleMarkD> toDtoList(Iterable<VehicleMark> list) {
-       return ((List<VehicleMark>) list).stream().map(this::toDto)
-                .collect(Collectors.toList());
+       return ((List<VehicleMark>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
     public VehicleMarkD toDto(VehicleMark entity) { 
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return modelMapper.map(entity, VehicleMarkD.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+		return mapper.map(entity, VehicleMarkD.class);
     }
 
     public VehicleMark toEntity(VehicleMarkD entity) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        return modelMapper.map(entity, VehicleMark.class);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        return mapper.map(entity, VehicleMark.class);
     }
 }
