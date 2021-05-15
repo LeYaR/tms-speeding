@@ -1,12 +1,12 @@
 package com.tms.speeding.service;
 
 import com.tms.speeding.dto.DirectoryD;
-import com.tms.speeding.mappers.CountryMapper;
-import com.tms.speeding.mappers.DepartmentMapper;
-import com.tms.speeding.mappers.RankMapper;
-import com.tms.speeding.mappers.RegionMapper;
-import com.tms.speeding.mappers.VehicleMarkMapper;
-import com.tms.speeding.mappers.VehicleModelMapper;
+import com.tms.speeding.mapper.CountryMapper;
+import com.tms.speeding.mapper.DepartmentMapper;
+import com.tms.speeding.mapper.RankMapper;
+import com.tms.speeding.mapper.RegionMapper;
+import com.tms.speeding.mapper.VehicleMarkMapper;
+import com.tms.speeding.mapper.VehicleModelMapper;
 import com.tms.speeding.repository.CountryRepository;
 import com.tms.speeding.repository.DepartmentRepository;
 import com.tms.speeding.repository.RankRepository;

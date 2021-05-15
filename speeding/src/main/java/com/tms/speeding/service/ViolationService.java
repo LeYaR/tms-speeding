@@ -2,7 +2,7 @@ package com.tms.speeding.service;
 
 import com.tms.speeding.dto.ViolationD;
 import com.tms.speeding.entity.Violation;
-import com.tms.speeding.mappers.ViolationMapper;
+import com.tms.speeding.mapper.ViolationMapper;
 import com.tms.speeding.repository.PersonRepository;
 import com.tms.speeding.repository.VehicleRepository;
 import com.tms.speeding.repository.ViolationRepository;

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.tms.speeding.dto.PersonD;
 import com.tms.speeding.entity.Person;
-import com.tms.speeding.mappers.PersonMapper;
+import com.tms.speeding.mapper.PersonMapper;
 import com.tms.speeding.repository.PersonRepository;
 import com.tms.speeding.util.Auxiliary;
 import com.tms.speeding.util.ResponseObject;

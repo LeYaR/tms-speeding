@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.tms.speeding.dto.InspectorD;
 import com.tms.speeding.entity.Inspector;
-import com.tms.speeding.mappers.InspectorMapper;
+import com.tms.speeding.mapper.InspectorMapper;
 import com.tms.speeding.repository.InspectorRepository;
 import com.tms.speeding.repository.PersonRepository;
 import com.tms.speeding.util.Auxiliary;

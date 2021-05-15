@@ -1,4 +1,4 @@
-package com.tms.speeding.mappers;
+package com.tms.speeding.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
