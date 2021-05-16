@@ -4,6 +4,7 @@ public class ResponseObject {
     private boolean success;
     private String type;
     private String message;
+    private Object data;
 
     public ResponseObject() {
         this.success = true;
@@ -49,5 +50,13 @@ public class ResponseObject {
         this.message = message;
     }
 
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+    
     
 }

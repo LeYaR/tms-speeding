@@ -1,5 +1,8 @@
 package com.tms.speeding.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.tms.speeding.dto.ViolationD;
 import com.tms.speeding.entity.Violation;
 import com.tms.speeding.mapper.ViolationMapper;
@@ -29,8 +32,18 @@ public class ViolationService {
         this.mapper = mapper;
     }
 
-    public Iterable<ViolationD> getAll() {
-        return mapper.toDtoList(repository.findAll());
+    private ResponseObject prepareListResponse (long count, Iterable<ViolationD> list) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("list", list);
+        var response = new ResponseObject();
+        response.setData(result);
+        return response;
+    }
+
+    public ResponseObject getAll() {
+        return prepareListResponse(repository.count(),
+                                   mapper.toDtoList(repository.findAll()));
     }
 
     public ViolationD getById(Integer id) {
@@ -38,16 +51,19 @@ public class ViolationService {
         return entity == null ? null : mapper.toDto(entity);
     }
 
-    public Iterable<ViolationD> getAllByString(String search) {
-        return mapper.toDtoList(repository.findByAll(search));
+    public ResponseObject getAllByString(String search) {
+        return prepareListResponse(repository.countBySearch(search),
+                                   mapper.toDtoList(repository.findByAll(search)));
     }
 
-    public Iterable<ViolationD> getAllByPage(Integer page, Integer limit) {
-        return mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
+    public ResponseObject getAllByPage(Integer page, Integer limit) {
+        return prepareListResponse(repository.count(),
+                                   mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
-    public Iterable<ViolationD> getAllByPageAndString(String search, Integer page, Integer limit) {
-        return mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
+    public ResponseObject getAllByPageAndString(String search, Integer page, Integer limit) {
+        return prepareListResponse(repository.countBySearch(search),
+                                   mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
     private boolean validate(ViolationD object) {

@@ -21,7 +21,7 @@ public class ViolationController {
     }
 
     @PostMapping
-    public Iterable<ViolationD> getAll() {
+    public ResponseObject getAll() {
         return service.getAll();
     }
 
@@ -31,18 +31,18 @@ public class ViolationController {
     }
     
     @PostMapping(params = {"search"})
-	public Iterable<ViolationD> getAllByString(String search) {
+	public ResponseObject getAllByString(String search) {
         return service.getAllByString(search);
 	}
 
     @PostMapping(params = {"page"})
-	public Iterable<ViolationD> getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
+	public ResponseObject getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return service.getAllByPage(page, limit);
 	}
 
     @PostMapping(params = {"search", "page"})
-	public Iterable<ViolationD> getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
+	public ResponseObject getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                    @RequestParam(value = "limit", defaultValue = "20") Integer limit,
                                                    String search) {
         return service.getAllByPageAndString(search, page, limit);

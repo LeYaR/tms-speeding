@@ -24,11 +24,14 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Int
                         + " lower(last_name) = lower(?#{#person.lastName})"
                         + " and lower(first_name) = lower(?#{#person.firstName})"
                         + " and date_format(born, '%d-%m-%Y') = date_format(?#{#person.bornDate}, '%d-%m-%Y')"
-                        + " or lower(identification_number) = lower(?#{#person.personalNumber}) limit 1"
+                        + " or lower(identification_number) = lower(?#{#person.personalNumber})"
                         + " or id = ?#{#person.id} limit 1";
 
     @Query(value = "select *" + QUERY_BASE, nativeQuery = true)
     Iterable<Person> findByAll(String search);
+
+    @Query(value = "select count(1)" + QUERY_BASE, nativeQuery = true)
+    long countBySearch(String search);
 
     @Query(value = "select *" + QUERY_BASE, countQuery = "select count(1)" + QUERY_BASE, nativeQuery = true)
     Page<Person> findByAll(String search, Pageable pageable);

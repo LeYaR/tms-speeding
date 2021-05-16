@@ -32,6 +32,9 @@ public interface InspectorRepository extends PagingAndSortingRepository<Inspecto
     @Query(value = "select a.*" + QUERY_BASE, nativeQuery = true)
     Iterable<Inspector> findByAll(String search);
 
+    @Query(value = "select count(1)" + QUERY_BASE, nativeQuery = true)
+    long countBySearch(String search);
+
     @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(a.*)" + QUERY_BASE, nativeQuery = true)
     Page<Inspector> findByAll(String search, Pageable pageable);
 

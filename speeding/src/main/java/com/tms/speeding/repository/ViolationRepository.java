@@ -23,6 +23,9 @@ public interface ViolationRepository extends PagingAndSortingRepository<Violatio
     @Query(value = "select a.*" + QUERY_BASE, nativeQuery = true)
     Iterable<Violation> findByAll(String search);
 
+    @Query(value = "select count(1)" + QUERY_BASE, nativeQuery = true)
+    long countBySearch(String search);
+
     @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(a.*)" + QUERY_BASE, nativeQuery = true)
     Page<Violation> findByAll(String search, Pageable pageable);
 }

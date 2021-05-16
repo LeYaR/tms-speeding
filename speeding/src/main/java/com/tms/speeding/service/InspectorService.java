@@ -1,5 +1,7 @@
 package com.tms.speeding.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import com.tms.speeding.dto.InspectorD;
@@ -26,8 +28,18 @@ public class InspectorService {
         this.mapper = mapper;
     }
 
-    public Iterable<InspectorD> getAll() {
-        return mapper.toDtoList(repository.findAll());
+    private ResponseObject prepareListResponse (long count, Iterable<InspectorD> list) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("list", list);
+        var response = new ResponseObject();
+        response.setData(result);
+        return response;
+    }
+
+    public ResponseObject getAll() {
+        return prepareListResponse(repository.count(),
+                                   mapper.toDtoList(repository.findAll()));
     }
 
     public InspectorD getById(Integer id) {
@@ -35,16 +47,19 @@ public class InspectorService {
         return entity == null ? null : mapper.toDto(entity);
     }
 
-    public Iterable<InspectorD> getAllByString(String search) {
-        return mapper.toDtoList(repository.findByAll(search));
+    public ResponseObject getAllByString(String search) {
+        return prepareListResponse(repository.countBySearch(search),
+                                   mapper.toDtoList(repository.findByAll(search)));
     }
 
-    public Iterable<InspectorD> getAllByPage(Integer page, Integer limit) {
-        return mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
+    public ResponseObject getAllByPage(Integer page, Integer limit) {
+        return prepareListResponse(repository.count(),
+                                   mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
-    public Iterable<InspectorD> getAllByPageAndString(String search, Integer page, Integer limit) {
-        return mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
+    public ResponseObject getAllByPageAndString(String search, Integer page, Integer limit) {
+        return prepareListResponse(repository.countBySearch(search),
+                                   mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
     private boolean validate(InspectorD object) {

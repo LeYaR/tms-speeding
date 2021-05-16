@@ -21,7 +21,7 @@ public class PersonController {
     }
 
     @PostMapping
-    public Iterable<PersonD> getAll() {
+    public ResponseObject getAll() {
         return service.getAll();
     }
 
@@ -31,20 +31,20 @@ public class PersonController {
     }
     
     @PostMapping(params = {"search"})
-	public Iterable<PersonD> getAllByString(String search) {
+	public ResponseObject getAllByString(String search) {
         return service.getAllByString(search);
 	}
 
     @PostMapping(params = {"page"})
-	public Iterable<PersonD> getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+	public ResponseObject getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                       @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return service.getAllByPage(page, limit);
 	}
 
     @PostMapping(params = {"search", "page"})
-	public Iterable<PersonD> getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                   @RequestParam(value = "limit", defaultValue = "20") Integer limit,
-                                                   String search) {
+	public ResponseObject getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+                                                String search) {
         return service.getAllByPageAndString(search, page, limit);
 	}
 

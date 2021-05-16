@@ -1,0 +1,105 @@
+body > .container {
+    height: 100%;
+    padding-top: 50px;
+    padding-left: 4.4em;
+    display: none;
+}
+
+body > .container.visible {
+    display: block;
+}
+
+.top.menu.fixed {
+    z-index: 102;
+}
+
+.left.menu {
+    padding-top: 50px;
+}
+
+.grid {
+    height: 100%;
+    width: 100%;;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from, .fade-leave-to, .fade-enter {
+    opacity: 0;
+}
+
+.flex-c {
+    display: flex !important;
+    flex-flow: column !important;
+    min-height: 100%;
+}
+
+.flex-r {
+    display: flex !important;
+    flex-flow: row !important;
+}
+
+.flex-1 {
+    flex-grow: 1 !important;
+}
+
+.centered {
+    align-self: center;
+}
+
+.column > .basic.segments > .segment:first-child {
+    padding-top: 0 !important;
+}
+
+.segment.flex-1 > table:only-child {
+    height: 100%;
+}
+
+.column > .basic.segments:only-child {
+    height: 100%;
+}
+
+.column > .basic.segments > .segment:last-child {
+    padding-bottom: 0 !important;
+}
+
+.column > .basic.segments > .segment {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.segment > div.flex-r:only-child > div:not(:first-child) {
+    padding-left: 1em;
+}
+
+i:only-child, td > i {
+    margin: 0 !important;
+}
+
+div.centered.right {
+    text-align: right;
+}
+
+.absolute {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.side {
+    z-index: 1000;
+    padding: 0;
+}
+
+.side > .dimmer {
+    padding: 0;
+}
+
+body > div > div.dimmer {
+    z-index: 1100 !important;
+}

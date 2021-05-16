@@ -1,11 +1,357 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-	<title>tt</title>
-    <script src="src/jquery-3.6.0.min.js"></script>
-	<script src="src/app.js"></script>
-</head>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Expires" content="0">
+		<script src="src/jquery-3.6.0.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="src/css/semantic.min.css">
+		<script src="src/semantic.min.js"></script>
+		<script src="src/vue_2.6.12.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="src/css/style.css">
+		<script type="text/javascript" src="src/app.js" defer=""></script>
+		<!--<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Secular+One&amp;display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">-->
+	  
+		<title>PRJSP</title>
+	  </head>
 <body>
-	<!-- TO DOOOOOOOOOOOOOOOOOOO -->
+	<div id="main" class="container" :class="{visible: isCreated}">
+		<div class="ui inverted dimmer" :class="{active: !isReady}">
+			<div class="ui loader"></div>
+		</div>
+		<div class="ui large top fixed inverted borderless menu">
+			<div class="item">
+				<i class="large yellow radiation icon"></i>
+			</div>
+			<div class="right menu">
+				<div class="item">
+					<i class="large sign out link icon"></i>
+				</div>
+			</div>
+		</div>
+		<div class="ui large left fixed vertical icon menu">
+			<a class="violet item" :class="{active: activeTab == 'people'}" @click="activeTab = 'people'">
+				<i class="large users icon"></i>
+			</a>
+			<a class="blue item" :class="{active: activeTab == 'inspectors'}" @click="activeTab = 'inspectors'">
+				<i class="large ghost icon"></i>
+			</a>
+			<a class="red item" :class="{active: activeTab == 'violations'}" @click="activeTab = 'violations'">
+				<i class="large car crash icon"></i>
+			</a>
+		</div>
+		<transition name="fade" mode="out-in">
+			<div class="ui divided centered grid" :key="'people'" v-if="activeTab == 'people'">
+				<transition name="fade" mode="out-in">
+					<div class="side absolute" v-if="forms.people.visible" :key="'ePerson'">
+						<div class="ui inverted dimmer active">
+							<div class="ui centered divided grid">
+								<div class="row">
+									<div class="eight wide column"></div>
+									<div class="eight wide column">
+										<div class="ui segments flex-c">
+											<div class="ui segment">
+												<div class="flex-r">
+													<div class="centered flex-1">
+														<div class="ui small header">
+															<i class="user icon"></i>
+															<div class="content">{{forms.people.id == null ? 'New' : 'Save'}} person</div>
+														</div>
+													</div>
+													<div class="centered">
+														<i class="large close link icon" @click="forms.people.visible = false"></i>
+													</div>
+												</div>
+											</div>
+											<div class="ui segment flex-1">
+												<div class="ui small form">
+													<div class="field" :class="{warning: isEmpty(forms.people.data.lastName)}">
+														<label>Last name</label>
+														<input type="text" placeholder="..." v-model="forms.people.data.lastName"/>
+													</div>
+													<div class="field" :class="{warning: isEmpty(forms.people.data.firstName)}">
+														<label>First name</label>
+														<input type="text" placeholder="..." v-model="forms.people.data.firstName"/>
+													</div>
+													<div class="field">
+														<label>Middle name</label>
+														<input type="text" placeholder="..." v-model="forms.people.data.middleName"/>
+													</div>
+													<div class="fields">
+														<div class="field" :class="{warning: isEmpty(forms.people.data.bornDate)}">
+															<label>Born date</label>
+															<calendar-date :date="forms.people.data.bornDate"
+																			@updated="function(data) {forms.people.data.bornDate = data}"></calendar-date>
+														</div>
+														<div class="sixteen wide field">
+															<label>Personal number</label>
+															<input type="text" placeholder="..." v-model="forms.people.data.personalNumber"/>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="ui right aligned segment">
+												<div class="ui right labeled blue icon button" :class="{disabled: !isPersonFormValid}"
+													 @click="saveForm('people')">
+													Save
+													<i class="save icon"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+				<div class="row">
+					<div class="column">
+						<div class="ui basic flex-c segments">
+							<div class="ui segment">
+								<div class="flex-r">
+									<div class="centered">
+										<div class="ui header">
+											<i class="users icon"></i>
+											<div class="content">Personal data</div>
+										</div>
+									</div>
+									<div class="centered flex-1">
+										<div class="ui fluid circular icon search input">
+											<input class="prompt" type="text" placeholder="..." @keyup.enter="doSearch(event.target.value)"/>
+											<i class="blue search icon"></i>
+										</div>
+									</div>
+									<div class="centered">
+										<div class="ui primary icon button" @click="clearForm('people')"><i class="plus icon"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="ui segment flex-1">
+								<table class="ui unstackable very basic single line selectable table">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned">#</th>
+											<th class="center aligned">Name</th>
+											<th class="center aligned">Born</th>
+											<th class="center aligned">Personal&nbsp;number</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in grids.people.list.data" @click="openForm('people', val)">
+											<td class="collapsing center aligned">{{gridStats.people.startWith+ key}}</td>
+											<td class="left aligned">{{val.lastName + ' ' + val.firstName + ' ' + emptyVal(val.middleName)}}</td>
+											<td class="collapsing center aligned">{{val.bornDate}}</td>
+											<td class="collapsing center aligned">{{val.personalNumber}}</td>
+										</tr>
+										<tr v-for="n in gridStats.people.empty"><td colspan="4">-</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned segment">
+								<div class="ui small compact menu" :style="{visibility: gridStats.people.pages < 2 ? 'hidden' : 'visible'}">
+									<a class="item" :class="{disabled: grids.people.list.page == 1}"
+													@click="getList(grids.people.list.page - 1)">
+													<i class="small chevron left icon"></i>
+									</a>
+									<a class="item" :class="{disabled: grids.people.list.page == gridStats.people.pages}"
+													@click="getList(grids.people.list.page + 1)">
+													<i class="small chevron right icon"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui divided centered grid" :key="'inspectors'" v-if="activeTab == 'inspectors'">
+				<div class="row">
+					<div class="column">
+						<div class="ui basic flex-c segments">
+							<div class="ui segment">
+								<div class="flex-r">
+									<div class="centered">
+										<div class="ui header">
+											<i class="ghost icon"></i>
+											<div class="content">Inspectors</div>
+										</div>
+									</div>
+									<div class="centered flex-1">
+										<div class="ui fluid circular icon search input" @keyup.enter="doSearch(event.target.value)">
+											<input class="prompt" type="text" placeholder="..." />
+											<i class="blue search icon"></i>
+										</div>
+									</div>
+									<div class="centered">
+										<div class="ui primary icon button"><i class="plus icon"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="ui segment flex-1">
+								<table class="ui unstackable very basic single line selectable table">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned">#</th>
+											<th class="center aligned">Name</th>
+											<th class="center aligned">Badge</th>
+											<th class="center aligned">Rank</th>
+											<th class="center aligned">Department</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in grids.inspectors.list.data">
+											<td class="collapsing center aligned">{{gridStats.inspectors.startWith+ key}}</td>
+											<td class="left aligned">{{val.person.lastName + ' ' + val.person.firstName + ' ' + val.person.middleName}}</td>
+											<td class="collapsing center aligned">{{val.badgeNumber}}</td>
+											<td class="collapsing center aligned">{{getDir('ranks', val.rank)}}</td>
+											<td class="collapsing center aligned">{{getDir('departments', val.department)}}</td>
+										</tr>
+										<tr v-for="n in gridStats.inspectors.empty"><td colspan="5">-</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned segment">
+								<div class="ui small compact menu" :style="{visibility: gridStats.inspectors.pages < 2 ? 'hidden' : 'visible'}">
+									<a class="item" :class="{disabled: grids.inspectors.list.page == 1}"
+													@click="getList(grids.inspectors.list.page - 1)">
+													<i class="small chevron left icon"></i>
+									</a>
+									<a class="item" :class="{disabled: grids.inspectors.list.page == gridStats.inspectors.pages}"
+													@click="getList(grids.inspectors.list.page + 1)">
+													<i class="small chevron right icon"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui divided centered grid" :key="'violations'" v-if="activeTab == 'violations'">
+				<div class="row">
+					<div class="column">
+						<div class="ui basic flex-c segments">
+							<div class="ui segment">
+								<div class="flex-r">
+									<div class="centered">
+										<div class="ui header">
+											<i class="car crash icon"></i>
+											<div class="content">Violations</div>
+										</div>
+									</div>
+									<div class="centered flex-1">
+										<div class="ui fluid circular icon search input">
+											<input class="prompt" type="text" placeholder="..." @keyup.enter="doSearch(event.target.value)"/>
+											<i class="blue search icon"></i>
+										</div>
+									</div>
+									<div class="centered">
+										<div class="ui primary icon button"><i class="plus icon"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="ui segment flex-1">
+								<table class="ui unstackable very basic single line table">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned">#</th>
+											<th class="center aligned">Date</th>
+											<th class="center aligned">Region</th>
+											<th class="center aligned">Limit</th>
+											<th class="center aligned">Actual</th>
+											<th class="center aligned">V</th>
+											<th class="center aligned">G</th>
+											<th class="center aligned">I</th>
+											<th class="center aligned">Paid</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in grids.violations.list.data">
+											<td class="collapsing center aligned">{{gridStats.violations.startWith+ key}}</td>
+											<td class="collapsing center aligned">{{val.violationDate}}</td>
+											<td class="left aligned">{{getDir('regions', val.region)}}</td>
+											<td class="collapsing center aligned">{{val.speedLimit}}</td>
+											<td class="collapsing center aligned">{{val.actualSpeed}}</td>
+											<td class="collapsing center aligned">
+												<popup  inline-template :hover="true" :position="'bottom right'">
+													<i class="large blue exclamation circle link icon"></i>
+												</popup>
+												<div class="ui popup">
+													<div class="ui left aligned bulleted list">
+														<div class="item">
+															{{val.vehicle.vin}}
+														</div>
+														<div class="item">
+															{{val.vehicle.regNumber}}
+														</div>
+														<div class="item" v-if="!isEmpty(val.vehicle.model)">
+															{{getDir('models', val.vehicle.model)}}
+														</div>
+													</div>
+												</div>
+											</td>
+											<td class="collapsing center aligned">
+												<popup  inline-template :hover="true" :position="'bottom right'">
+													<i class="large blue exclamation circle link icon"></i>
+												</popup>
+												<div class="ui popup">
+													<div class="ui left aligned bulleted list">
+														<div class="item">
+															{{val.guilty.lastName + ' ' + val.guilty.firstName + ' ' + val.guilty.middleName}}
+														</div>
+														<div class="item">
+															{{val.guilty.bornDate}}
+														</div>
+														<div class="item" v-if="!isEmpty(val.guilty.personalNumber)">
+															{{val.guilty.personalNumber}}
+														</div>
+													</div>
+												</div>
+											</td>
+											<td class="collapsing center aligned">
+												<popup  inline-template :hover="true" :position="'bottom right'">
+													<i class="large blue exclamation circle link icon"></i>
+												</popup>
+												<div class="ui popup">
+													<div class="ui left aligned bulleted list">
+														<div class="item">
+															{{val.inspector.person.lastName + ' ' + val.inspector.person.firstName + ' ' + val.inspector.person.middleName}}
+														</div>
+														<div class="item">
+															{{val.inspector.badgeNumber}}
+														</div>
+														<div class="item">
+															{{getDir('ranks', val.inspector.rank)}}
+														</div>
+													</div>
+												</div>
+											</td>
+											<td class="collapsing center aligned">
+												<i class="green checkmark icon" v-if="val.repaid"></i>
+												<i class="red close icon" v-if="!val.repaid"></i>
+											</td>
+										</tr>
+										<tr v-for="n in gridStats.violations.empty"><td colspan="9">-</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned segment">
+								<div class="ui small compact menu" :style="{visibility: gridStats.violations.pages < 2 ? 'hidden' : 'visible'}">
+									<a class="item" :class="{disabled: grids.violations.list.page == 1}"
+													@click="getList(grids.violations.list.page - 1)">
+													<i class="small chevron left icon"></i>
+									</a>
+									<a class="item" :class="{disabled: grids.violations.list.page == gridStats.violations.pages}"
+													@click="getList(grids.violations.list.page + 1)">
+													<i class="small chevron right icon"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</transition>
+	</div>
 </body>
 </html>
