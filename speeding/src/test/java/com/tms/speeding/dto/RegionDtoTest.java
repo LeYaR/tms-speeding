@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CountryDTest {
+class RegionDtoTest {
 
     @Test
     void getId() {
@@ -23,10 +23,10 @@ class CountryDTest {
     }
 
     @Test
-    void getIso() {
+    void getCountry() {
     }
 
     @Test
-    void setIso() {
+    void setCountry() {
     }
 }
