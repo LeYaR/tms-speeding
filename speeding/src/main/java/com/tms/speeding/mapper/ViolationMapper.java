@@ -3,11 +3,11 @@ package com.tms.speeding.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.InspectorD;
-import com.tms.speeding.dto.PersonD;
-import com.tms.speeding.dto.VehicleD;
-import com.tms.speeding.dto.ViolationD;
-import com.tms.speeding.entity.Violation;
+import com.tms.speeding.dto.InspectorDto;
+import com.tms.speeding.dto.PersonDto;
+import com.tms.speeding.dto.VehicleDto;
+import com.tms.speeding.dto.ViolationDto;
+import com.tms.speeding.dbo.ViolationDbo;
 import com.tms.speeding.repository.InspectorRepository;
 import com.tms.speeding.repository.PersonRepository;
 import com.tms.speeding.repository.RegionRepository;
@@ -47,28 +47,28 @@ public class ViolationMapper {
         this.vRepository = vRepository;
     }
 
-    public List<ViolationD> toDtoList(Iterable<Violation> list) {
-       return ((List<Violation>) list).stream().map(this::toDto)
+    public List<ViolationDto> toDtoList(Iterable<ViolationDbo> list) {
+       return ((List<ViolationDbo>) list).stream().map(this::toDto)
                 .collect(Collectors.toList());
 	}
     
 
-    public ViolationD toDto(Violation entity) { 
-        final InspectorD inspector = iMapper.toDto(entity.getInspector());
-        final PersonD guilty = pMapper.toDto(entity.getGuilty());
-        final VehicleD vehicle = vMapper.toDto(entity.getVehicle());
+    public ViolationDto toDto(ViolationDbo entity) {
+        final InspectorDto inspector = iMapper.toDto(entity.getInspector());
+        final PersonDto guilty = pMapper.toDto(entity.getGuilty());
+        final VehicleDto vehicle = vMapper.toDto(entity.getVehicle());
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        mapper.typeMap(Violation.class, ViolationD.class)
-        .addMappings(m -> m.map(src -> inspector, ViolationD::setInspector))
-        .addMappings(m -> m.map(src -> guilty, ViolationD::setGuilty))
-        .addMappings(m -> m.map(src -> vehicle, ViolationD::setVehicle))
-        .addMappings(m -> m.map(src -> src.getRegion().getId(), ViolationD::setRegion));
-		return mapper.map(entity, ViolationD.class);
+        mapper.typeMap(ViolationDbo.class, ViolationDto.class)
+        .addMappings(m -> m.map(src -> inspector, ViolationDto::setInspector))
+        .addMappings(m -> m.map(src -> guilty, ViolationDto::setGuilty))
+        .addMappings(m -> m.map(src -> vehicle, ViolationDto::setVehicle))
+        .addMappings(m -> m.map(src -> src.getRegion().getId(), ViolationDto::setRegion));
+		return mapper.map(entity, ViolationDto.class);
     }
 
-    public Violation toEntity(ViolationD entity) {
+    public ViolationDbo toEntity(ViolationDto entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        Violation result = mapper.map(entity, Violation.class);
+        ViolationDbo result = mapper.map(entity, ViolationDbo.class);
         if (entity.getGuilty() != null && entity.getGuilty().getId() != null) {
             result.setGuilty(pRepository.findById(entity.getGuilty().getId()).orElse(null));
         }

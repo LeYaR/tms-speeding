@@ -3,8 +3,8 @@ package com.tms.speeding.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.RankD;
-import com.tms.speeding.entity.Rank;
+import com.tms.speeding.dto.RankDto;
+import com.tms.speeding.dbo.RankDbo;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -19,17 +19,17 @@ public class RankMapper {
         this.mapper = mapper;
     }
 
-    public List<RankD> toDtoList(Iterable<Rank> list) {
-       return ((List<Rank>) list).stream().map(this::toDto).collect(Collectors.toList());
+    public List<RankDto> toDtoList(Iterable<RankDbo> list) {
+       return ((List<RankDbo>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-    private RankD toDto(Rank entity) { 
+    private RankDto toDto(RankDbo entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(entity, RankD.class);
+		return mapper.map(entity, RankDto.class);
     }
 
-    public Rank toEntity(RankD entity) { 
+    public RankDbo toEntity(RankDto entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(entity, Rank.class);
+		return mapper.map(entity, RankDbo.class);
     }
 }

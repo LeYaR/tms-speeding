@@ -3,8 +3,8 @@ package com.tms.speeding.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.RegionD;
-import com.tms.speeding.entity.Region;
+import com.tms.speeding.dto.RegionDto;
+import com.tms.speeding.dbo.RegionDbo;
 import com.tms.speeding.repository.CountryRepository;
 
 import org.modelmapper.ModelMapper;
@@ -22,20 +22,20 @@ public class RegionMapper {
         this.cRepository = cRepository;
     }
 
-    public List<RegionD> toDtoList(Iterable<Region> list) {
-       return ((List<Region>) list).stream().map(this::toDto).collect(Collectors.toList());
+    public List<RegionDto> toDtoList(Iterable<RegionDbo> list) {
+       return ((List<RegionDbo>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-    public RegionD toDto(Region entity) { 
+    public RegionDto toDto(RegionDbo entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        mapper.typeMap(Region.class, RegionD.class)
-        .addMappings(m -> m.map(src -> src.getCountry().getId(), RegionD::setCountry));
-		return mapper.map(entity, RegionD.class);
+        mapper.typeMap(RegionDbo.class, RegionDto.class)
+        .addMappings(m -> m.map(src -> src.getCountry().getId(), RegionDto::setCountry));
+		return mapper.map(entity, RegionDto.class);
     }
 
-    public Region toEntity(RegionD entity) {
+    public RegionDbo toEntity(RegionDto entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        Region result = mapper.map(entity, Region.class);
+        RegionDbo result = mapper.map(entity, RegionDbo.class);
         if (entity.getCountry() != null) {
             result.setCountry(cRepository.findById(entity.getCountry()).orElse(null));
         }        

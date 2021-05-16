@@ -1,13 +1,13 @@
 package com.tms.speeding.repository;
 
-import com.tms.speeding.entity.Violation;
+import com.tms.speeding.dbo.ViolationDbo;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface ViolationRepository extends PagingAndSortingRepository<Violation, Number> {
+public interface ViolationRepository extends PagingAndSortingRepository<ViolationDbo, Number> {
     final String QUERY_BASE = " from sv_violations a"
                               + " left join sv_regions f on a.region_id = f.id, sv_people b, sv_inspectors c"
                               + " left join sv_ranks d on c.rank_id = d.id"
@@ -21,8 +21,8 @@ public interface ViolationRepository extends PagingAndSortingRepository<Violatio
                               + " or lower(f.title) like %?1%)";
 
     @Query(value = "select a.*" + QUERY_BASE, nativeQuery = true)
-    Iterable<Violation> findByAll(String search);
+    Iterable<ViolationDbo> findByAll(String search);
 
     @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(a.*)" + QUERY_BASE, nativeQuery = true)
-    Page<Violation> findByAll(String search, Pageable pageable);
+    Page<ViolationDbo> findByAll(String search, Pageable pageable);
 }

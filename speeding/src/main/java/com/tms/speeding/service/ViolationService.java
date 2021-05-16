@@ -1,7 +1,7 @@
 package com.tms.speeding.service;
 
-import com.tms.speeding.dto.ViolationD;
-import com.tms.speeding.entity.Violation;
+import com.tms.speeding.dto.ViolationDto;
+import com.tms.speeding.dbo.ViolationDbo;
 import com.tms.speeding.mapper.ViolationMapper;
 import com.tms.speeding.repository.PersonRepository;
 import com.tms.speeding.repository.VehicleRepository;
@@ -29,28 +29,28 @@ public class ViolationService {
         this.mapper = mapper;
     }
 
-    public Iterable<ViolationD> getAll() {
+    public Iterable<ViolationDto> getAll() {
         return mapper.toDtoList(repository.findAll());
     }
 
-    public ViolationD getById(Integer id) {
-        final Violation entity = repository.findById(id).orElse(null);
+    public ViolationDto getById(Integer id) {
+        final ViolationDbo entity = repository.findById(id).orElse(null);
         return entity == null ? null : mapper.toDto(entity);
     }
 
-    public Iterable<ViolationD> getAllByString(String search) {
+    public Iterable<ViolationDto> getAllByString(String search) {
         return mapper.toDtoList(repository.findByAll(search));
     }
 
-    public Iterable<ViolationD> getAllByPage(Integer page, Integer limit) {
+    public Iterable<ViolationDto> getAllByPage(Integer page, Integer limit) {
         return mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
     }
 
-    public Iterable<ViolationD> getAllByPageAndString(String search, Integer page, Integer limit) {
+    public Iterable<ViolationDto> getAllByPageAndString(String search, Integer page, Integer limit) {
         return mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
     }
 
-    private boolean validate(ViolationD object) {
+    private boolean validate(ViolationDto object) {
         return object.getActualSpeed() != null &&
                object.getSpeedLimit() != null &&
                object.getGuilty() != null && object.getGuilty().getId() != null &&
@@ -61,7 +61,7 @@ public class ViolationService {
                vRepository.findById(object.getVehicle().getId()).orElse(null) != null;
     }
 
-    public ResponseObject save(ViolationD object) {
+    public ResponseObject save(ViolationDto object) {
         if (!validate(object)) {
             return new ResponseObject(false, "error", Auxiliary.SV_INVALID);
         }

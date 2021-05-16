@@ -2,8 +2,8 @@ package com.tms.speeding.repository;
 
 import java.util.Optional;
 
-import com.tms.speeding.dto.PersonD;
-import com.tms.speeding.entity.Person;
+import com.tms.speeding.dto.PersonDto;
+import com.tms.speeding.dbo.PersonDbo;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface PersonRepository extends PagingAndSortingRepository<Person, Integer> {
+public interface PersonRepository extends PagingAndSortingRepository<PersonDbo, Integer> {
 
     final String QUERY_BASE = " from sv_people where"
                         + " lower(last_name) like %?1%"
@@ -28,12 +28,12 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Int
                         + " or id = ?#{#person.id} limit 1";
 
     @Query(value = "select *" + QUERY_BASE, nativeQuery = true)
-    Iterable<Person> findByAll(String search);
+    Iterable<PersonDbo> findByAll(String search);
 
     @Query(value = "select *" + QUERY_BASE, countQuery = "select count(1)" + QUERY_BASE, nativeQuery = true)
-    Page<Person> findByAll(String search, Pageable pageable);
+    Page<PersonDbo> findByAll(String search, Pageable pageable);
 
     @Query(value = QUERY_CHECK, nativeQuery = true)
-    Optional<Person> findByAll(@Param("person") PersonD person);
+    Optional<PersonDbo> findByAll(@Param("person") PersonDto person);
 
 }

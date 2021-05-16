@@ -2,8 +2,8 @@ package com.tms.speeding.service;
 
 import java.util.Optional;
 
-import com.tms.speeding.dto.InspectorD;
-import com.tms.speeding.entity.Inspector;
+import com.tms.speeding.dto.InspectorDto;
+import com.tms.speeding.dbo.InspectorDbo;
 import com.tms.speeding.mapper.InspectorMapper;
 import com.tms.speeding.repository.InspectorRepository;
 import com.tms.speeding.repository.PersonRepository;
@@ -26,38 +26,38 @@ public class InspectorService {
         this.mapper = mapper;
     }
 
-    public Iterable<InspectorD> getAll() {
+    public Iterable<InspectorDto> getAll() {
         return mapper.toDtoList(repository.findAll());
     }
 
-    public InspectorD getById(Integer id) {
-        final Inspector entity = repository.findById(id).orElse(null);
+    public InspectorDto getById(Integer id) {
+        final InspectorDbo entity = repository.findById(id).orElse(null);
         return entity == null ? null : mapper.toDto(entity);
     }
 
-    public Iterable<InspectorD> getAllByString(String search) {
+    public Iterable<InspectorDto> getAllByString(String search) {
         return mapper.toDtoList(repository.findByAll(search));
     }
 
-    public Iterable<InspectorD> getAllByPage(Integer page, Integer limit) {
+    public Iterable<InspectorDto> getAllByPage(Integer page, Integer limit) {
         return mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
     }
 
-    public Iterable<InspectorD> getAllByPageAndString(String search, Integer page, Integer limit) {
+    public Iterable<InspectorDto> getAllByPageAndString(String search, Integer page, Integer limit) {
         return mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
     }
 
-    private boolean validate(InspectorD object) {
+    private boolean validate(InspectorDto object) {
         return !Auxiliary.isEmpty(object.getBadgeNumber()) &&
                object.getPerson() != null && object.getPerson().getId() != null &&
                pRepository.findById(object.getPerson().getId()).orElse(null) != null;
     }
 
-    public ResponseObject save(InspectorD object) {
+    public ResponseObject save(InspectorDto object) {
         if (!validate(object)) {
             return new ResponseObject(false, "error", Auxiliary.SV_INVALID);
         }
-        Optional<Inspector> entity = repository.findByAll(object);
+        Optional<InspectorDbo> entity = repository.findByAll(object);
         if (entity.isPresent()) {
             final int id = entity.get().getId();
             if (object.getId() == null || object.getId() != id) {

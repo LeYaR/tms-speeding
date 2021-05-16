@@ -1,9 +1,9 @@
 package com.tms.speeding.repository;
 
-import com.tms.speeding.entity.Department;
+import com.tms.speeding.dbo.DepartmentDbo;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface DepartmentRepository extends CrudRepository<Department, Integer> {
+public interface DepartmentRepository extends CrudRepository<DepartmentDbo, Integer> {
     
 }

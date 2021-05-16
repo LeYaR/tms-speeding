@@ -1,6 +1,6 @@
 package com.tms.speeding.service;
 
-import com.tms.speeding.dto.DirectoryD;
+import com.tms.speeding.dto.DirectoryDto;
 import com.tms.speeding.mapper.CountryMapper;
 import com.tms.speeding.mapper.DepartmentMapper;
 import com.tms.speeding.mapper.RankMapper;
@@ -49,8 +49,8 @@ public class DirectoryService {
     @Autowired
     private DepartmentMapper departmentMapper;
 
-    public DirectoryD getDirectories () {
-        var result = new DirectoryD();
+    public DirectoryDto getDirectories () {
+        var result = new DirectoryDto();
         result.setCountries(countryMapper.toDtoList(countryRepository.findAll()));
         result.setRegions(regionMapper.toDtoList(regionRepository.findAll()));
         result.setMarks(markMapper.toDtoList(markRepository.findAll()));

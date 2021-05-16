@@ -3,8 +3,8 @@ package com.tms.speeding.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.PersonD;
-import com.tms.speeding.entity.Person;
+import com.tms.speeding.dto.PersonDto;
+import com.tms.speeding.dbo.PersonDbo;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -19,17 +19,17 @@ public class PersonMapper {
         this.mapper = mapper;
     }
 
-    public List<PersonD> toDtoList(Iterable<Person> list) {
-       return ((List<Person>) list).stream().map(this::toDto).collect(Collectors.toList());
+    public List<PersonDto> toDtoList(Iterable<PersonDbo> list) {
+       return ((List<PersonDbo>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-    public PersonD toDto(Person entity) { 
+    public PersonDto toDto(PersonDbo entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(entity, PersonD.class);
+		return mapper.map(entity, PersonDto.class);
     }
 
-    public Person toEntity(PersonD entity) { 
+    public PersonDbo toEntity(PersonDto entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(entity, Person.class);
+		return mapper.map(entity, PersonDbo.class);
     }
 }

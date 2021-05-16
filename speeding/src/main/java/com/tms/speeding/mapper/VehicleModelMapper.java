@@ -3,8 +3,8 @@ package com.tms.speeding.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.VehicleModelD;
-import com.tms.speeding.entity.VehicleModel;
+import com.tms.speeding.dto.VehicleModelDto;
+import com.tms.speeding.dbo.VehicleModelDbo;
 import com.tms.speeding.repository.VehicleMarkRepository;
 
 import org.modelmapper.ModelMapper;
@@ -22,20 +22,20 @@ public class VehicleModelMapper {
         this.vRepository = vRepository;
     }
 
-    public List<VehicleModelD> toDtoList(Iterable<VehicleModel> list) {
-       return ((List<VehicleModel>) list).stream().map(this::toDto).collect(Collectors.toList());
+    public List<VehicleModelDto> toDtoList(Iterable<VehicleModelDbo> list) {
+       return ((List<VehicleModelDbo>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-    public VehicleModelD toDto(VehicleModel entity) { 
+    public VehicleModelDto toDto(VehicleModelDbo entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        mapper.typeMap(VehicleModel.class, VehicleModelD.class)
-        .addMappings(m -> m.map(src -> src.getMark().getId(), VehicleModelD::setMark));
-		return mapper.map(entity, VehicleModelD.class);
+        mapper.typeMap(VehicleModelDbo.class, VehicleModelDto.class)
+        .addMappings(m -> m.map(src -> src.getMark().getId(), VehicleModelDto::setMark));
+		return mapper.map(entity, VehicleModelDto.class);
     }
 
-    public VehicleModel toEntity(VehicleModelD entity) {
+    public VehicleModelDbo toEntity(VehicleModelDto entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        VehicleModel result = mapper.map(entity, VehicleModel.class);
+        VehicleModelDbo result = mapper.map(entity, VehicleModelDbo.class);
         if (entity.getMark() != null) {
             result.setMark(vRepository.findById(entity.getMark()).orElse(null));
         }        

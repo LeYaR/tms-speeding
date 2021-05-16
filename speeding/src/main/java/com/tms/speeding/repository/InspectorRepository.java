@@ -2,8 +2,8 @@ package com.tms.speeding.repository;
 
 import java.util.Optional;
 
-import com.tms.speeding.dto.InspectorD;
-import com.tms.speeding.entity.Inspector;
+import com.tms.speeding.dto.InspectorDto;
+import com.tms.speeding.dbo.InspectorDbo;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface InspectorRepository extends PagingAndSortingRepository<Inspector, Integer> {
+public interface InspectorRepository extends PagingAndSortingRepository<InspectorDbo, Integer> {
     final String QUERY_BASE = " from sv_inspectors a"
                                 + " left join sv_ranks c on a.rank_id = c.id"
                                 + " left join sv_departments d on a.department_id = d.id, sv_people b"
@@ -30,11 +30,11 @@ public interface InspectorRepository extends PagingAndSortingRepository<Inspecto
                         + " or id = ?#{#inspector.id}";
 
     @Query(value = "select a.*" + QUERY_BASE, nativeQuery = true)
-    Iterable<Inspector> findByAll(String search);
+    Iterable<InspectorDbo> findByAll(String search);
 
     @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(a.*)" + QUERY_BASE, nativeQuery = true)
-    Page<Inspector> findByAll(String search, Pageable pageable);
+    Page<InspectorDbo> findByAll(String search, Pageable pageable);
 
     @Query(value = QUERY_CHECK, nativeQuery = true)
-    Optional<Inspector> findByAll(@Param("inspector") InspectorD inspector);
+    Optional<InspectorDbo> findByAll(@Param("inspector") InspectorDto inspector);
 }

@@ -3,8 +3,8 @@ package com.tms.speeding.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.CountryD;
-import com.tms.speeding.entity.Country;
+import com.tms.speeding.dto.CountryDto;
+import com.tms.speeding.dbo.CountryDbo;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -19,17 +19,17 @@ public class CountryMapper {
         this.mapper = mapper;
     }
 
-    public List<CountryD> toDtoList(Iterable<Country> list) {
-       return ((List<Country>) list).stream().map(this::toDto).collect(Collectors.toList());
+    public List<CountryDto> toDtoList(Iterable<CountryDbo> list) {
+       return ((List<CountryDbo>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-    public CountryD toDto(Country entity) { 
+    public CountryDto toDto(CountryDbo entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(entity, CountryD.class);
+		return mapper.map(entity, CountryDto.class);
     }
 
-    public Country toEntity(CountryD entity) {
+    public CountryDbo toEntity(CountryDto entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        return mapper.map(entity, Country.class);
+        return mapper.map(entity, CountryDbo.class);
     }
 }

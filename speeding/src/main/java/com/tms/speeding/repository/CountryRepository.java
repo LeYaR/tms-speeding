@@ -1,9 +1,9 @@
 package com.tms.speeding.repository;
 
-import com.tms.speeding.entity.Country;
+import com.tms.speeding.dbo.CountryDbo;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface CountryRepository extends CrudRepository<Country, Integer> {
+public interface CountryRepository extends CrudRepository<CountryDbo, Integer> {
     
 }

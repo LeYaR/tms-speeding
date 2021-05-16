@@ -3,8 +3,8 @@ package com.tms.speeding.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.LicenseD;
-import com.tms.speeding.entity.License;
+import com.tms.speeding.dto.LicenseDto;
+import com.tms.speeding.dbo.LicenseDbo;
 import com.tms.speeding.repository.PersonRepository;
 
 import org.modelmapper.ModelMapper;
@@ -22,20 +22,20 @@ public class LicenseMapper {
         this.pRepository = pRepository;
     }
 
-    public List<LicenseD> toDtoList(Iterable<License> list) {
-       return ((List<License>) list).stream().map(this::toDto).collect(Collectors.toList());
+    public List<LicenseDto> toDtoList(Iterable<LicenseDbo> list) {
+       return ((List<LicenseDbo>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-    public LicenseD toDto(License entity) { 
+    public LicenseDto toDto(LicenseDbo entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        mapper.typeMap(License.class, LicenseD.class)
-        .addMappings(m -> m.map(src -> src.getPerson().getId(), LicenseD::setPerson));
-		return mapper.map(entity, LicenseD.class);
+        mapper.typeMap(LicenseDbo.class, LicenseDto.class)
+        .addMappings(m -> m.map(src -> src.getPerson().getId(), LicenseDto::setPerson));
+		return mapper.map(entity, LicenseDto.class);
     }
 
-    public License toEntity(LicenseD entity) {
+    public LicenseDbo toEntity(LicenseDto entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        License result = mapper.map(entity, License.class);
+        LicenseDbo result = mapper.map(entity, LicenseDbo.class);
         if (entity.getPerson() != null) {
             result.setPerson(pRepository.findById(entity.getPerson()).orElse(null));
         }        

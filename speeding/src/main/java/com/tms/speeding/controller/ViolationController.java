@@ -1,6 +1,6 @@
 package com.tms.speeding.controller;
 
-import com.tms.speeding.dto.ViolationD;
+import com.tms.speeding.dto.ViolationDto;
 import com.tms.speeding.service.ViolationService;
 import com.tms.speeding.util.ResponseObject;
 
@@ -21,35 +21,35 @@ public class ViolationController {
     }
 
     @PostMapping
-    public Iterable<ViolationD> getAll() {
+    public Iterable<ViolationDto> getAll() {
         return service.getAll();
     }
 
     @PostMapping(params = {"id"})
-    public ViolationD getAllById(@RequestParam(value = "id", defaultValue = "0") Integer id) {
+    public ViolationDto getAllById(@RequestParam(value = "id", defaultValue = "0") Integer id) {
         return service.getById(id);
     }
     
     @PostMapping(params = {"search"})
-	public Iterable<ViolationD> getAllByString(String search) {
+	public Iterable<ViolationDto> getAllByString(String search) {
         return service.getAllByString(search);
 	}
 
     @PostMapping(params = {"page"})
-	public Iterable<ViolationD> getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+	public Iterable<ViolationDto> getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                               @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return service.getAllByPage(page, limit);
 	}
 
     @PostMapping(params = {"search", "page"})
-	public Iterable<ViolationD> getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                   @RequestParam(value = "limit", defaultValue = "20") Integer limit,
-                                                   String search) {
+	public Iterable<ViolationDto> getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                        @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+                                                        String search) {
         return service.getAllByPageAndString(search, page, limit);
 	}
 
     @PostMapping(path="/save")
-    public ResponseObject save(@RequestBody ViolationD object) {
+    public ResponseObject save(@RequestBody ViolationDto object) {
         return service.save(object);
     }
 }

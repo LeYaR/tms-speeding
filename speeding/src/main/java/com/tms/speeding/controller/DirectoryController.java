@@ -1,6 +1,6 @@
 package com.tms.speeding.controller;
 
-import com.tms.speeding.dto.DirectoryD;
+import com.tms.speeding.dto.DirectoryDto;
 import com.tms.speeding.service.DirectoryService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +18,7 @@ public class DirectoryController {
     }
 
     @PostMapping
-    public DirectoryD getAll() {
+    public DirectoryDto getAll() {
         return service.getDirectories();
     }
 }

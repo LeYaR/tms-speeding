@@ -2,8 +2,8 @@ package com.tms.speeding.service;
 
 import java.util.Optional;
 
-import com.tms.speeding.dto.PersonD;
-import com.tms.speeding.entity.Person;
+import com.tms.speeding.dto.PersonDto;
+import com.tms.speeding.dbo.PersonDbo;
 import com.tms.speeding.mapper.PersonMapper;
 import com.tms.speeding.repository.PersonRepository;
 import com.tms.speeding.util.Auxiliary;
@@ -23,38 +23,38 @@ public class PersonService {
         this.mapper = mapper;
     }
 
-    public Iterable<PersonD> getAll() {
+    public Iterable<PersonDto> getAll() {
         return mapper.toDtoList(repository.findAll());
     }
 
-    public PersonD getById(Integer id) {
-        final Person entity = repository.findById(id).orElse(null);
+    public PersonDto getById(Integer id) {
+        final PersonDbo entity = repository.findById(id).orElse(null);
         return entity == null ? null : mapper.toDto(entity);
     }
 
-    public Iterable<PersonD> getAllByString(String search) {
+    public Iterable<PersonDto> getAllByString(String search) {
         return mapper.toDtoList(repository.findByAll(search));
     }
 
-    public Iterable<PersonD> getAllByPage(Integer page, Integer limit) {
+    public Iterable<PersonDto> getAllByPage(Integer page, Integer limit) {
         return mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
     }
 
-    public Iterable<PersonD> getAllByPageAndString(String search, Integer page, Integer limit) {
+    public Iterable<PersonDto> getAllByPageAndString(String search, Integer page, Integer limit) {
         return mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent());
     }
 
-    private boolean validate(PersonD object) {
+    private boolean validate(PersonDto object) {
         return !Auxiliary.isEmpty(object.getLastName()) &&
                !Auxiliary.isEmpty(object.getFirstName()) &&
                object.getBornDate() != null;
     }
 
-    public ResponseObject save(PersonD object) {
+    public ResponseObject save(PersonDto object) {
         if (!validate(object)) {
             return new ResponseObject(false, "error", Auxiliary.SV_INVALID);
         }
-        Optional<Person> entity = repository.findByAll(object);
+        Optional<PersonDbo> entity = repository.findByAll(object);
         ResponseObject result = new ResponseObject();
         if (entity.isPresent()) {
             final int id = entity.get().getId();

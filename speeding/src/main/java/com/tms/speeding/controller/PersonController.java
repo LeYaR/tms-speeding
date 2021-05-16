@@ -1,6 +1,6 @@
 package com.tms.speeding.controller;
 
-import com.tms.speeding.dto.PersonD;
+import com.tms.speeding.dto.PersonDto;
 import com.tms.speeding.service.PersonService;
 import com.tms.speeding.util.ResponseObject;
 
@@ -21,35 +21,35 @@ public class PersonController {
     }
 
     @PostMapping
-    public Iterable<PersonD> getAll() {
+    public Iterable<PersonDto> getAll() {
         return service.getAll();
     }
 
     @PostMapping(params = {"id"})
-    public PersonD getAllById(@RequestParam(value = "id", defaultValue = "0") Integer id) {
+    public PersonDto getAllById(@RequestParam(value = "id", defaultValue = "0") Integer id) {
         return service.getById(id);
     }
     
     @PostMapping(params = {"search"})
-	public Iterable<PersonD> getAllByString(String search) {
+	public Iterable<PersonDto> getAllByString(String search) {
         return service.getAllByString(search);
 	}
 
     @PostMapping(params = {"page"})
-	public Iterable<PersonD> getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+	public Iterable<PersonDto> getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                            @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return service.getAllByPage(page, limit);
 	}
 
     @PostMapping(params = {"search", "page"})
-	public Iterable<PersonD> getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                   @RequestParam(value = "limit", defaultValue = "20") Integer limit,
-                                                   String search) {
+	public Iterable<PersonDto> getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                     @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+                                                     String search) {
         return service.getAllByPageAndString(search, page, limit);
 	}
 
     @PostMapping(path="/save")
-    public ResponseObject save(@RequestBody PersonD object) {
+    public ResponseObject save(@RequestBody PersonDto object) {
         return service.save(object);
     }
 

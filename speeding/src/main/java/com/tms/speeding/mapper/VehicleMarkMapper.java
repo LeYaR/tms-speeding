@@ -3,8 +3,8 @@ package com.tms.speeding.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.tms.speeding.dto.VehicleMarkD;
-import com.tms.speeding.entity.VehicleMark;
+import com.tms.speeding.dto.VehicleMarkDto;
+import com.tms.speeding.dbo.VehicleMarkDbo;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -19,17 +19,17 @@ public class VehicleMarkMapper {
         this.mapper = mapper;
     }
 
-    public List<VehicleMarkD> toDtoList(Iterable<VehicleMark> list) {
-       return ((List<VehicleMark>) list).stream().map(this::toDto).collect(Collectors.toList());
+    public List<VehicleMarkDto> toDtoList(Iterable<VehicleMarkDbo> list) {
+       return ((List<VehicleMarkDbo>) list).stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-    public VehicleMarkD toDto(VehicleMark entity) { 
+    public VehicleMarkDto toDto(VehicleMarkDbo entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-		return mapper.map(entity, VehicleMarkD.class);
+		return mapper.map(entity, VehicleMarkDto.class);
     }
 
-    public VehicleMark toEntity(VehicleMarkD entity) {
+    public VehicleMarkDbo toEntity(VehicleMarkDto entity) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-        return mapper.map(entity, VehicleMark.class);
+        return mapper.map(entity, VehicleMarkDbo.class);
     }
 }
