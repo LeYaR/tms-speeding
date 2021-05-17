@@ -27,7 +27,7 @@
         let inn = window.innerHeight;
         let out = window.outerHeight;
         return avl <= out ? inn: avl - out + inn + 21;
-    };
+    }
 
     function toastus(message, type) {
         $('body').toast({
@@ -117,7 +117,6 @@
         props: ['date'],
         mounted: function() {
         let self = this;
-        console.log(1);
         $(self.$el).calendar("set date", self.date).calendar({type: 'date',
             monthFirst: false,
             formatter: {
@@ -253,15 +252,19 @@
         methods: {
             saveForm: function(form) {
                 let self = this;
+                let list = this.activeTab;
+                let page = this.grids[list].list.page;
                 $.doAjax(form + '/save', this.forms[form].data).then(function(data) {
                     toastus(data.message, data.type);
+                    return self.processList(list, page)
+                }).then(function() {
                     self.forms[form].visible = false;
                 }).catch(function(data) {
                     toastus('Unable to save the data', 'error');
                 });
             },
             openForm: function(form, val) {
-                this.forms[form].data = val;
+                fillObject(this.forms[form].data, val);
                 this.forms[form].visible = true;
             },
             clearForm: function(val) {

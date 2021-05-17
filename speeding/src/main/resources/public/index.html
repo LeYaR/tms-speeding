@@ -25,6 +25,11 @@
 			<div class="item">
 				<i class="large yellow radiation icon"></i>
 			</div>
+			<div class="item">
+				<div class="ui inverted header">
+					<div class="content">DAT SPEEDING</div>
+				</div>
+			</div>
 			<div class="right menu">
 				<div class="item">
 					<i class="large sign out link icon"></i>
@@ -32,7 +37,7 @@
 			</div>
 		</div>
 		<div class="ui large left fixed vertical icon menu">
-			<a class="violet item" :class="{active: activeTab == 'people'}" @click="activeTab = 'people'">
+			<a class="teal item" :class="{active: activeTab == 'people'}" @click="activeTab = 'people'">
 				<i class="large users icon"></i>
 			</a>
 			<a class="blue item" :class="{active: activeTab == 'inspectors'}" @click="activeTab = 'inspectors'">
@@ -132,7 +137,7 @@
 								<table class="ui unstackable very basic single line selectable table">
 									<thead>
 										<tr>
-											<th class="collapsing center aligned">#</th>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
 											<th class="center aligned">Name</th>
 											<th class="center aligned">Born</th>
 											<th class="center aligned">Personal&nbsp;number</th>
@@ -251,7 +256,7 @@
 								</div>
 							</div>
 							<div class="ui segment flex-1">
-								<table class="ui unstackable very basic single line table">
+								<table class="ui unstackable very basic single line selectable table">
 									<thead>
 										<tr>
 											<th class="collapsing center aligned">#</th>
