@@ -31,7 +31,7 @@ public interface ViolationRepository extends PagingAndSortingRepository<Violatio
     @Query(value = "select count(1)" + QUERY_BASE, nativeQuery = true)
     long countBySearch(String search);
 
-    @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(a.*)" + QUERY_BASE, nativeQuery = true)
+    @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(1)" + QUERY_BASE, nativeQuery = true)
     Page<Violation> findByAll(String search, Pageable pageable);
 
     final String QUERY_GEN = "insert into sv_violations (violation_date, region_id, speed_limit,"

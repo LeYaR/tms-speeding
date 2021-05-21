@@ -516,7 +516,7 @@
                     case 'violations':
                         this.forms.violations.data[this.redirection.context].id = val.id;
                         if (this.redirection.target == 'people') {
-                            this.forms.violations.data[this.redirection.context].text = val.lastName + ' ' + val.firstName + ' ' + val.middleName;
+                            this.forms.violations.data[this.redirection.context].text = val.lastName + ' ' + val.firstName + ' ' + emptyVal(val.middleName);
                         } else {
                             this.forms.violations.data.vehicle.text = val.vin + ' / ' + val.regNumber;
                         }

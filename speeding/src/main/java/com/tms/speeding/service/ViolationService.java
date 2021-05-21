@@ -89,7 +89,7 @@ public class ViolationService {
     }
 
     private Specification<Violation> byInspector (Integer inspector) {
-        return (root, query, builder) -> inspector == null ? builder.conjunction() : builder.equal(root.get("inspector").get("id"), inspector);
+        return (root, query, builder) -> inspector == null ? builder.conjunction() : builder.equal(root.get("inspector").get("person").get("id"), inspector);
     }
 
     private Specification<Violation> byRegion (Integer region) {

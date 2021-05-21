@@ -624,7 +624,7 @@
 															</div>
 															<div class="ui left aligned bulleted list">
 																<div class="item">
-																	{{val.guilty.lastName + ' ' + val.guilty.firstName + ' ' + val.guilty.middleName}}
+																	{{val.guilty.lastName + ' ' + val.guilty.firstName + ' ' + emptyVal(val.guilty.middleName)}}
 																</div>
 																<div class="item">
 																	{{val.guilty.bornDate}}
@@ -658,7 +658,7 @@
 															</div>
 															<div class="ui left aligned bulleted list">
 																<div class="item">
-																	{{val.inspector.person.lastName + ' ' + val.inspector.person.firstName + ' ' + val.inspector.person.middleName}}
+																	{{val.inspector.person.lastName + ' ' + val.inspector.person.firstName + ' ' + emptyVal(val.inspector.person.middleName)}}
 																</div>
 																<div class="item">
 																	{{val.inspector.badgeNumber}}
