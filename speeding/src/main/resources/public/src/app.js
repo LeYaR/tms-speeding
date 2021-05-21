@@ -92,8 +92,8 @@
             position   : self.position,
             on: 'hover',
             delay: {
-            show: 300,
-            hide: 300
+                show: 300,
+                hide: 300
             }
         });
         }

@@ -600,9 +600,7 @@
 											<th class="left aligned">Region</th>
 											<th class="collapsing center aligned">Limit</th>
 											<th class="collapsing center aligned">Actual</th>
-											<th class="collapsing center aligned">V</th>
-											<th class="collapsing center aligned">G</th>
-											<th class="collapsing center aligned">I</th>
+											<th class="collapsing center aligned"><i class="exclamation icon"></i></th>
 											<th class="collapsing center aligned">Paid</th>
 										</tr>
 									</thead>
@@ -617,52 +615,58 @@
 												<popup  inline-template :hover="true" :position="'bottom right'">
 													<i class="large blue exclamation circle link icon"></i>
 												</popup>
-												<div class="ui popup">
-													<div class="ui left aligned bulleted list">
-														<div class="item">
-															{{val.vehicle.vin}}
+												<div class="ui fluid popup ps-0">
+													<div class="ui three column padded relaxed divided grid">
+														<div class="column">
+															<div class="ui small header">
+																<i class="user icon"></i>
+																<div class="content">Guilty</div>
+															</div>
+															<div class="ui left aligned bulleted list">
+																<div class="item">
+																	{{val.guilty.lastName + ' ' + val.guilty.firstName + ' ' + val.guilty.middleName}}
+																</div>
+																<div class="item">
+																	{{val.guilty.bornDate}}
+																</div>
+																<div class="item" v-if="!isEmpty(val.guilty.personalNumber)">
+																	{{val.guilty.personalNumber}}
+																</div>
+															</div>
 														</div>
-														<div class="item">
-															{{val.vehicle.regNumber}}
+														<div class="column">
+															<div class="ui small header">
+																<i class="car icon"></i>
+																<div class="content">Vehicle</div>
+															</div>
+															<div class="ui left aligned bulleted list">
+																<div class="item">
+																	{{val.vehicle.vin}}
+																</div>
+																<div class="item">
+																	{{val.vehicle.regNumber}}
+																</div>
+																<div class="item" v-if="!isEmpty(val.vehicle.model)">
+																	{{getDirEntry('models', val.vehicle.model)}}
+																</div>
+															</div>
 														</div>
-														<div class="item" v-if="!isEmpty(val.vehicle.model)">
-															{{getDirEntry('models', val.vehicle.model)}}
-														</div>
-													</div>
-												</div>
-											</td>
-											<td class="collapsing center aligned">
-												<popup  inline-template :hover="true" :position="'bottom right'">
-													<i class="large blue exclamation circle link icon"></i>
-												</popup>
-												<div class="ui popup">
-													<div class="ui left aligned bulleted list">
-														<div class="item">
-															{{val.guilty.lastName + ' ' + val.guilty.firstName + ' ' + val.guilty.middleName}}
-														</div>
-														<div class="item">
-															{{val.guilty.bornDate}}
-														</div>
-														<div class="item" v-if="!isEmpty(val.guilty.personalNumber)">
-															{{val.guilty.personalNumber}}
-														</div>
-													</div>
-												</div>
-											</td>
-											<td class="collapsing center aligned">
-												<popup  inline-template :hover="true" :position="'bottom right'">
-													<i class="large blue exclamation circle link icon"></i>
-												</popup>
-												<div class="ui popup">
-													<div class="ui left aligned bulleted list">
-														<div class="item">
-															{{val.inspector.person.lastName + ' ' + val.inspector.person.firstName + ' ' + val.inspector.person.middleName}}
-														</div>
-														<div class="item">
-															{{val.inspector.badgeNumber}}
-														</div>
-														<div class="item">
-															{{getDirEntry('ranks', val.inspector.rank)}}
+														<div class="column">
+															<div class="ui small header">
+																<i class="ghost icon"></i>
+																<div class="content">Inspector</div>
+															</div>
+															<div class="ui left aligned bulleted list">
+																<div class="item">
+																	{{val.inspector.person.lastName + ' ' + val.inspector.person.firstName + ' ' + val.inspector.person.middleName}}
+																</div>
+																<div class="item">
+																	{{val.inspector.badgeNumber}}
+																</div>
+																<div class="item">
+																	{{getDirEntry('ranks', val.inspector.rank)}}
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
