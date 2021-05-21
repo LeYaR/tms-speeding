@@ -645,8 +645,8 @@
                         options.search = search;
                     }
                 }
-                let chain = Promise.resolve();
                 return new Promise(function(resolve, reject) {
+                    let chain = Promise.resolve();
                     if (filter) {
                         chain = chain.then(function() {
                             return $.doAjax(url + '/filter/', options);
