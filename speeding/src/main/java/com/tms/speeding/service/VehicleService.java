@@ -2,10 +2,12 @@ package com.tms.speeding.service;
 
 import java.util.Optional;
 
-import com.tms.speeding.dto.PersonD;
-import com.tms.speeding.entity.Person;
-import com.tms.speeding.mapper.PersonMapper;
-import com.tms.speeding.repository.PersonRepository;
+import com.tms.speeding.dto.VehicleD;
+import com.tms.speeding.entity.Vehicle;
+import com.tms.speeding.mapper.VehicleMapper;
+import com.tms.speeding.repository.RegionRepository;
+import com.tms.speeding.repository.VehicleModelRepository;
+import com.tms.speeding.repository.VehicleRepository;
 import com.tms.speeding.util.Auxiliary;
 import com.tms.speeding.util.ResponseObject;
 
@@ -13,14 +15,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersonService {
+public class VehicleService {
+    private final VehicleRepository repository;
+    private final VehicleModelRepository mRepository;
+    private final RegionRepository rRepository;
+    private final VehicleMapper mapper;
 
-    private final PersonRepository repository;
-    private final PersonMapper mapper;
-
-    public PersonService(PersonRepository repository, PersonMapper mapper) {
+    public VehicleService(VehicleRepository repository,
+                          VehicleMapper mapper,
+                          VehicleModelRepository mRepository,
+                          RegionRepository rRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.mRepository = mRepository;
+        this.rRepository = rRepository;
     }
 
     public ResponseObject getAll() {
@@ -28,8 +36,8 @@ public class PersonService {
                                    mapper.toDtoList(repository.findAll()));
     }
 
-    public PersonD getById(Integer id) {
-        final Person entity = repository.findById(id).orElse(null);
+    public VehicleD getById(Integer id) {
+        final Vehicle entity = repository.findById(id).orElse(null);
         return entity == null ? null : mapper.toDto(entity);
     }
 
@@ -48,33 +56,33 @@ public class PersonService {
                                    mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
-    public boolean validate(PersonD object) {
-        return !Auxiliary.isEmpty(object.getLastName()) &&
-               !Auxiliary.isEmpty(object.getFirstName()) &&
-               object.getBornDate() != null;
+    public boolean validate(VehicleD object) {
+        return !Auxiliary.isEmpty(object.getVin()) &&
+               !Auxiliary.isEmpty(object.getRegNumber()) &&
+               object.getModel() != null;
     }
 
-    public ResponseObject save(PersonD object) {
+    public ResponseObject save(VehicleD object) {
         if (!validate(object)) {
             return new ResponseObject(false, "error", Auxiliary.SV_INVALID);
         }
-        Optional<Person> entity = repository.findByAll(object);
+        Optional<Vehicle> entity = repository.findByAll(object);
         if (entity.isPresent()) {
             final int id = entity.get().getId();
             if (object.getId() != null && object.getId() != id) {
                 return new ResponseObject("warning", Auxiliary.SV_EXISTS);
             }
             object.setId(id);
-            var person = entity.get();
-            person.setLastName(object.getLastName());
-            person.setFirstName(object.getFirstName());
-            person.setMiddleName(object.getMiddleName());
-            person.setBornDate(object.getBornDate());
-            person.setPersonalNumber(object.getPersonalNumber());
-            repository.save(person);
-            return new ResponseObject("warning", Auxiliary.SV_OVERWRITTEN);
+            var entry = entity.get();
+            entry.setVin(object.getVin());
+            entry.setRegNumber(object.getRegNumber());
+            entry.setModel(mRepository.findById(object.getModel()).orElse(null));
+            entry.setRegion(object.getRegion() == null ? null : rRepository.findById(object.getRegion()).orElse(null));
+            repository.save(entry);
+            return object.getId() != null ? new ResponseObject() : new ResponseObject("warning", Auxiliary.SV_OVERWRITTEN);
         }
         repository.save(mapper.toEntity(object));
         return new ResponseObject();
     }
+
 }

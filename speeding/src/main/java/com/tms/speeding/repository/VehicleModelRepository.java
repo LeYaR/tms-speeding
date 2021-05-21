@@ -2,8 +2,8 @@ package com.tms.speeding.repository;
 
 import com.tms.speeding.entity.VehicleModel;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface VehicleModelRepository extends CrudRepository<VehicleModel, Integer> {
+public interface VehicleModelRepository extends PagingAndSortingRepository<VehicleModel, Integer> {
     
 }

@@ -1,5 +1,8 @@
 package com.tms.speeding.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Auxiliary {
 
     public static final String SV_FAILED = "Failed to save the data";
@@ -14,4 +17,12 @@ public class Auxiliary {
         return property == null || property.isEmpty() || property.isBlank();
     }
 
+    public static <T>ResponseObject prepareListResponse (long count, Iterable<T> list) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("list", list);
+        var response = new ResponseObject();
+        response.setData(result);
+        return response;
+    }
 }

@@ -1,8 +1,7 @@
 package com.tms.speeding.controller;
 
-import com.tms.speeding.dto.ViolationD;
-import com.tms.speeding.dto.ViolationFilter;
-import com.tms.speeding.service.ViolationService;
+import com.tms.speeding.dto.VehicleD;
+import com.tms.speeding.service.VehicleService;
 import com.tms.speeding.util.ResponseObject;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path="/violations")
-public class ViolationController {
-    
-    private final ViolationService service;
+@RequestMapping(path="/vehicles")
+public class VehicleController {
 
-    public ViolationController(ViolationService service) {
+    private final VehicleService service;
+
+    public VehicleController(VehicleService service) {
         this.service = service;
     }
 
@@ -26,25 +25,8 @@ public class ViolationController {
         return service.getAll();
     }
 
-    @PostMapping(path = "generate/", params = {"limit"})
-	public ResponseObject generate(@RequestParam(value = "limit", defaultValue = "0") Integer limit,
-                                   @RequestParam(value = "start", defaultValue = "0") String start,
-                                   @RequestParam(value = "end", defaultValue = "0") String end) {
-        return service.generate(limit, start, end);
-	}
-
-    @PostMapping(path = "generate/")
-	public ResponseObject generate() {
-        return service.generate();
-	}
-
-    @PostMapping(path = "filter/")
-	public ResponseObject getFiltered(@RequestBody ViolationFilter filter) {
-        return service.getFiltered(filter);
-	}
-
     @PostMapping(params = {"id"})
-    public ViolationD getAllById(@RequestParam(value = "id", defaultValue = "0") Integer id) {
+    public VehicleD getAllById(@RequestParam(value = "id", defaultValue = "0") Integer id) {
         return service.getById(id);
     }
     
@@ -67,7 +49,7 @@ public class ViolationController {
 	}
 
     @PostMapping(path="/save")
-    public ResponseObject save(@RequestBody ViolationD object) {
+    public ResponseObject save(@RequestBody VehicleD object) {
         return service.save(object);
     }
 }

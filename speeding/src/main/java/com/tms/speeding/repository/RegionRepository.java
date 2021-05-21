@@ -2,8 +2,8 @@ package com.tms.speeding.repository;
 
 import com.tms.speeding.entity.Region;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface RegionRepository extends CrudRepository<Region, Integer> {
+public interface RegionRepository extends PagingAndSortingRepository<Region, Integer> {
     
 }

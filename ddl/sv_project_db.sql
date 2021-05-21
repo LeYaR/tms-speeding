@@ -14,11 +14,19 @@ execute stm;
 deallocate prepare stm;
 set foreign_key_checks = 1;
 
+create table sv_users (
+	id integer primary key auto_increment,
+	login varchar(100) not null,
+	password varchar(200) not null,
+	registration_date date,
+	last_visit date
+);
+
 create table sv_people (
 	id integer primary key auto_increment,
 	last_name varchar(50) not null,
 	first_name varchar(50) not null,
-	middle_name varchar(50) not null,
+	middle_name varchar(50),
 	born date,
 	identification_number varchar(14)
 );
@@ -107,16 +115,99 @@ create table sv_violations (
 	foreign key (caught_by) references sv_inspectors(id) on delete cascade
 );
 
+-- insert into sv_users (id, login, password, registration_date, last_visit) values (1, 'test', md5('test'), current_date(), null);
 
--- insert into sv_countries (title, iso) values ('Беларусь', 'BLR'); 
--- insert into sv_regions (title, country_id) values ('Минская область', 1);
--- insert into sv_vehicle_marks (title) values ('Reno');
--- insert into sv_vehicle_models (title, mark_id) values ('Logan', 1);
--- insert into sv_ranks (title) values ('some rank');
--- insert into sv_departments (title, address) values ('NYPD', '1 Police Plaza - New York, NY');
--- insert into sv_people ()
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (1, 'Magnificent', 'Suleiman', null, str_to_date('1494-11-04', '%Y-%m-%d'), 'SDDD@@2');
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (2, 'Isabella', 'Castile', null, str_to_date('1451-04-22', '%Y-%m-%d'),	null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (3, 'Curie', 'Marie', 'Sklodowska', str_to_date('1867-11-07', '%Y-%m-%d'), null);	
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (4, 'Hemingway', 'Ernest', '#333#', str_to_date('1899-07-12', '%Y-%m-%d'), '33WER12-21');
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (5, 'Einstein', 'Albert', null, str_to_date('1879-03-14', '%Y-%m-%d'), null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (6, 'Thatcher', 'Margaret', 'Hilda', str_to_date('1925-10-13', '%Y-%m-%d'), 'XXDHG-12-2S');
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (7, 'Newton', 'Isaac', null, str_to_date('1642-12-25', '%Y-%m-%d'), null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (8, 'Lavoisier', 'Antoine', null, str_to_date('1743-08-26', '%Y-%m-%d'), null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (9, 'Maxwell', 'James', 'Clerk', str_to_date('1831-06-13', '%Y-%m-%d'), 'YTD-123SS');
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (10, 'Bonaparte', 'Napoleon', null, str_to_date('1769-08-15', '%Y-%m-%d'), null);	
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (11, 'Shelley', 'Mary', 'Wollstonecraft', str_to_date('1797-08-30', '%Y-%m-%d'), null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (12, 'Mozart', 'Wolfgang', 'Amadeus', str_to_date('1756-01-27', '%Y-%m-%d'), null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (13, 'Montessori', 'Maria', null, str_to_date('1870-08-31', '%Y-%m-%d'), null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (14, 'Kirchhoff', 'Gustav', 'Robert', str_to_date('1824-03-11', '%Y-%m-%d'), '0023VFG-1');
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (15, 'Anthony', 'Susan', 'Brownell', str_to_date('1820-02-15', '%Y-%m-%d'), null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (16, 'Marley', 'Bob', 'Nesta', str_to_date('1945-02-05', '%Y-%m-%d'), null);
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (17, 'Washington', 'George', null, str_to_date('2021-05-16', '%Y-%m-%d'), 'BV-##233/36S');
+-- insert into sv_people (id, last_name, first_name, middle_name, born, identification_number) values (18, 'Faltskog', 'Agnetha', 'Ase', str_to_date('1950-04-05', '%Y-%m-%d'), null);
+
+-- insert into sv_inspectors (id, person_id, badge_number, rank_id, department_id) values (1, 4, 'AAA', 1, 1);
+-- insert into sv_inspectors (id, person_id, badge_number, rank_id, department_id) values (2, 7, '1234556', 2, 1);
+-- insert into sv_inspectors (id, person_id, badge_number, rank_id, department_id) values (3, 17, 'ZZ-123', 2, null);
+
+-- insert into sv_departments (id, title, address) values (1, 'NYPD', '1 Police Plaza - New York, NY');
+-- insert into sv_departments (id, title, address) values (2, 'Ghost Dep', 'Somwhere Place, Lost, ST');
+
+-- insert into sv_ranks (id, title) values (1, 'Some rank');
+-- insert into sv_ranks (id, title) values (2, 'Antoher Rank');
+
+-- insert into sv_vehicle_marks (id, title) values (1, 'Reno');
+
+-- insert into sv_vehicle_models (id, title, mark_id) values (1, 'Logan', 1);
+-- insert into sv_vehicle_models (id, title, mark_id) values (1, 'Latitude', 1);
+
+-- insert into sv_countries (id, title, iso) values (1, 'Belarus', 'BLR');
+-- insert into sv_countries (id, title, iso) values (2, 'Brazil', null);
+-- insert into sv_countries (id, title, iso) values (3, 'Japan', null);
+-- insert into sv_countries (id, title, iso) values (4, 'Argentina', null);
+-- insert into sv_countries (id, title, iso) values (5, 'USA', null);
+-- insert into sv_countries (id, title, iso) values (6, 'Waffleland', 'WUF');
+-- insert into sv_countries (id, title, iso) values (7, 'Thailand', null);
+-- insert into sv_countries (id, title, iso) values (8, 'France', null);
+-- insert into sv_countries (id, title, iso) values (9, 'Russia', null);
+-- insert into sv_countries (id, title, iso) values (10, 'Mexico', 'MEX');
+-- insert into sv_countries (id, title, iso) values (11, 'India', 'IND');
+-- insert into sv_countries (id, title, iso) values (12, 'Chile', null);
+-- insert into sv_countries (id, title, iso) values (13, 'Italy', 'ITA');
+-- insert into sv_countries (id, title, iso) values (14, 'Paraguay', null);
+-- insert into sv_countries (id, title, iso) values (15, 'China', null);
+-- insert into sv_countries (id, title, iso) values (16, 'Canada', null);
+-- insert into sv_countries (id, title, iso) values (17, 'Greece', null);
+
+-- insert into sv_regions (id, title, country_id) values (1, 'Minsk Region', 1);
+-- insert into sv_regions (id, title, country_id) values (2, 'Provincia de Catamarca', 12);
+-- insert into sv_regions (id, title, country_id) values (3, 'Smolensk region', 9);
+
+drop procedure if exists generateViolations;
+create procedure generateViolations(in value integer, in p_start date, in p_end date)
+begin
+	declare i integer default 0;
+	while i < value do
+		insert into sv_violations (violation_date, region_id, speed_limit, actual_speed, guilty_id, vehicle_id, caught_by, is_repaid, note)
+		with rng as (
+		select str_to_date(date_format(from_unixtime(a.d_start + floor(rand() * a.d_range)), '%d-%m-%Y'), '%d-%m-%Y') rand_date
+		from (select unix_timestamp(p_start) d_start,
+		(unix_timestamp(p_end) - unix_timestamp(p_start)) d_range) a
+		), notes as (
+		select null text
+		union all select 'stop you there'
+		union all select 'another day - another violation'
+		union all select 'crazy fast'
+		union all select 'pathetic note'
+		union all select 'caught finally'
+		union all select 'next time, buddy'
+		union all select 'paid'
+		union all select 'random row'
+		), pre as (
+		select b.rand_date dt,
+		(select id from sv_regions order by rand() limit 1) rg,
+		floor(50 + rand() * 30) li,
+		(select id from sv_people order by rand() limit 1) gu,
+		(select id from sv_vehicles order by rand() limit 1) ve,
+		round(rand()) re,
+		(select text from notes order by rand() limit 1) nt
+		from rng b
+		) select a.dt, a.rg, a.li, a.li + floor(rand() * 20) ac,
+		a.gu, a.ve, (select id from sv_inspectors where id != a.gu order by rand() limit 1) ch,
+		a.re, a.nt from pre a;
+		set i = i + 1;
+	end while;
+end
 
 -- grant all on sv_project_db.* to sys;
 -- select table_name from information_schema.tables where table_type = 'BASE TABLE' and table_schema = 'sv_project_db';
--- insert into sv_ranks (title) values ('some_rank');
--- select * from sv_ranks;

@@ -37,14 +37,14 @@ public class InspectorController {
 
     @PostMapping(params = {"page"})
 	public ResponseObject getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+                                       @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return service.getAllByPage(page, limit);
 	}
 
     @PostMapping(params = {"search", "page"})
 	public ResponseObject getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                   @RequestParam(value = "limit", defaultValue = "20") Integer limit,
-                                                   String search) {
+                                                @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+                                                String search) {
         return service.getAllByPageAndString(search, page, limit);
 	}
 

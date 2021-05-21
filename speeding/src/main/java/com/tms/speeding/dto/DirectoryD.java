@@ -7,6 +7,8 @@ public class DirectoryD {
     Iterable<VehicleModelD> models;
     Iterable<RankD> ranks;
     Iterable<DepartmentD> departments;
+    Iterable<CountryD> countriesAll;
+    Iterable<VehicleMarkD> marksAll;
 
     public Iterable<CountryD> getCountries() {
         return countries;
@@ -44,5 +46,17 @@ public class DirectoryD {
     public void setDepartments(Iterable<DepartmentD> departments) {
         this.departments = departments;
     }
-    
+    public Iterable<CountryD> getCountriesAll() {
+        return countriesAll;
+    }
+    public void setCountriesAll(Iterable<CountryD> countriesAll) {
+        this.countriesAll = countriesAll;
+    }
+    public Iterable<VehicleMarkD> getMarksAll() {
+        return marksAll;
+    }
+    public void setMarksAll(Iterable<VehicleMarkD> marksAll) {
+        this.marksAll = marksAll;
+    }
+
 }
