@@ -463,6 +463,11 @@
             }
         },
         methods: {
+            logOut: function() {
+                $.post('logout', {}).then(function() {
+                    location.reload();
+                });
+            },
             stringToDate: function(val) {
                 if (isEmpty(val)) {
                     return null;
@@ -505,7 +510,9 @@
                 let filter = this.prepareFilter();
                 this.processList('violations', 1, filter).then(function() {
                     self.forms.violations.isFiltered = true;
-                })
+                }).catch(function(data) {
+                    toastus('Unable to retrieve the data', 'error');
+                });
             },
             resolveRedirect: function(val) {
                 switch (this.redirection.source) {
