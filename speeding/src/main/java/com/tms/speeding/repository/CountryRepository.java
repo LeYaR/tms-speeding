@@ -1,9 +1,10 @@
 package com.tms.speeding.repository;
 
-import com.tms.speeding.dbo.CountryDbo;
+import com.tms.speeding.domain.dbo.CountryDbo;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface CountryRepository extends CrudRepository<CountryDbo, Integer> {
-    
+public interface CountryRepository extends PagingAndSortingRepository<CountryDbo, Integer> {
+
+    CountryDbo findByTitle(String title);
 }

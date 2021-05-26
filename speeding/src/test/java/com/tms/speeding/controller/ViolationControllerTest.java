@@ -11,6 +11,18 @@ class ViolationControllerTest {
     }
 
     @Test
+    void generate() {
+    }
+
+    @Test
+    void testGenerate() {
+    }
+
+    @Test
+    void getFiltered() {
+    }
+
+    @Test
     void getAllById() {
     }
 

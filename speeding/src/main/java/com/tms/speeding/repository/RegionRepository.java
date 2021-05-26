@@ -1,9 +1,10 @@
 package com.tms.speeding.repository;
 
-import com.tms.speeding.dbo.RegionDbo;
 
-import org.springframework.data.repository.CrudRepository;
 
-public interface RegionRepository extends CrudRepository<RegionDbo, Integer> {
+import com.tms.speeding.domain.dbo.RegionDbo;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface RegionRepository extends PagingAndSortingRepository<RegionDbo, Integer> {
     
 }

@@ -1,6 +1,6 @@
 package com.tms.speeding.controller;
 
-import com.tms.speeding.dto.InspectorDto;
+import com.tms.speeding.domain.dto.InspectorDto;
 import com.tms.speeding.service.InspectorService;
 import com.tms.speeding.util.ResponseObject;
 
@@ -21,7 +21,7 @@ public class InspectorController {
     }
 
     @PostMapping
-    public Iterable<InspectorDto> getAll() {
+    public ResponseObject getAll() {
         return service.getAll();
     }
 
@@ -31,20 +31,20 @@ public class InspectorController {
     }
     
     @PostMapping(params = {"search"})
-	public Iterable<InspectorDto> getAllByString(String search) {
+	public ResponseObject getAllByString(String search) {
         return service.getAllByString(search);
 	}
 
     @PostMapping(params = {"page"})
-	public Iterable<InspectorDto> getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                               @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+	public ResponseObject getAllByPage(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                       @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return service.getAllByPage(page, limit);
 	}
 
     @PostMapping(params = {"search", "page"})
-	public Iterable<InspectorDto> getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                        @RequestParam(value = "limit", defaultValue = "20") Integer limit,
-                                                        String search) {
+	public ResponseObject getAllByPageAndString(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+                                                String search) {
         return service.getAllByPageAndString(search, page, limit);
 	}
 

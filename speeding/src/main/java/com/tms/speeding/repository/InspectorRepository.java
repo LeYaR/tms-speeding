@@ -2,8 +2,9 @@ package com.tms.speeding.repository;
 
 import java.util.Optional;
 
-import com.tms.speeding.dto.InspectorDto;
-import com.tms.speeding.dbo.InspectorDbo;
+import com.tms.speeding.domain.dbo.InspectorDbo;
+import com.tms.speeding.domain.dto.InspectorDto;
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface InspectorRepository extends PagingAndSortingRepository<InspectorDbo, Integer> {
-    final String QUERY_BASE = " from sv_inspectors a"
+     String QUERY_BASE = " from sv_inspectors a"
                                 + " left join sv_ranks c on a.rank_id = c.id"
                                 + " left join sv_departments d on a.department_id = d.id, sv_people b"
                                 + " where a.person_id = b.id"
@@ -24,7 +25,7 @@ public interface InspectorRepository extends PagingAndSortingRepository<Inspecto
                                 + " or lower(c.title) like %?1%"
                                 + " or lower(d.title) like %?1%)";
     
-    final String QUERY_CHECK = "select * from sv_inspectors where"
+     String QUERY_CHECK = "select * from sv_inspectors where"
                         + " person_id = ?#{#inspector.person.id}"
                         + " or lower(badge_number) = lower(?#{#inspector.badgeNumber})"
                         + " or id = ?#{#inspector.id}";
@@ -32,7 +33,10 @@ public interface InspectorRepository extends PagingAndSortingRepository<Inspecto
     @Query(value = "select a.*" + QUERY_BASE, nativeQuery = true)
     Iterable<InspectorDbo> findByAll(String search);
 
-    @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(a.*)" + QUERY_BASE, nativeQuery = true)
+    @Query(value = "select count(1)" + QUERY_BASE, nativeQuery = true)
+    long countBySearch(String search);
+
+    @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(1)" + QUERY_BASE, nativeQuery = true)
     Page<InspectorDbo> findByAll(String search, Pageable pageable);
 
     @Query(value = QUERY_CHECK, nativeQuery = true)

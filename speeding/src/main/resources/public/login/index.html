@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Expires" content="0">
+		<script src="../src/jquery-3.6.0.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../src/css/semantic.min.css">
+		<script src="../src/semantic.min.js"></script>
+		<script src="../src/vue_2.6.12.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../src/css/style.css">
+		<script type="text/javascript" src="src/app.js" defer=""></script>
+		<!--<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Secular+One&amp;display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">-->
+	  
+		<title>PRJSP</title>
+	</head>
+    <body>
+        <div id="main" class="container" :class="{visible: isCreated}">
+            <div class="ui middle aligned center aligned grid" :class="{visible: isCreated}">
+                <div class="column" style="max-width: 500px;">
+                <h2 class="ui blue image header">
+                    <img src="src/logo.png" class="image">
+                    <div class="content">
+                    Log-in to your account
+                    </div>
+                </h2>
+                <form class="ui large form" @keyup.enter="logIn()">
+                    <div class="ui stacked segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="email" placeholder="login" v-model="login">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="password" placeholder="Password" v-model="password">
+                            </div>
+                        </div>
+                        <div class="field" v-if="!loginMode">
+                            <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="password" placeholder="Repeat password" v-model="repeatPassword">
+                            </div>
+                        </div>
+                        <div class="ui fluid large blue submit button" v-if="loginMode" :class="{disabled: !isLoginOk}" @click="logIn()">Login</div>
+                        <div class="ui fluid large google plus submit button" v-if="!loginMode" :class="{disabled: !isRegOk}" @click="logIn()">Sign In</div>
+                    </div>
+            
+                    <div class="ui error message"></div>
+            
+                </form>
+            
+                <div class="ui message" v-if="loginMode">
+                    New to us? <a @click="loginMode = false" href="#">Sign Up</a>
+                </div>
+                <div class="ui message" v-if="!loginMode">
+                    Changed your mind? <a @click="clearCredentials()" href="#">Back to Login</a>
+                </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,9 +1,10 @@
 package com.tms.speeding.repository;
 
-import com.tms.speeding.dbo.VehicleMarkDbo;
 
-import org.springframework.data.repository.CrudRepository;
 
-public interface VehicleMarkRepository extends CrudRepository<VehicleMarkDbo, Integer> {
+import com.tms.speeding.domain.dbo.VehicleMarkDbo;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface VehicleMarkRepository extends PagingAndSortingRepository<VehicleMarkDbo, Integer> {
     
 }

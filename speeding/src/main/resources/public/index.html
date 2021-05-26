@@ -1,11 +1,962 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-	<title>tt</title>
-    <script src="src/jquery-3.6.0.min.js"></script>
-	<script src="src/app.js"></script>
-</head>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Expires" content="0">
+		<script src="src/jquery-3.6.0.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="src/css/semantic.min.css">
+		<script src="src/semantic.min.js"></script>
+		<script src="src/vue_2.6.12.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="src/css/style.css">
+		<script type="text/javascript" src="src/app.js" defer=""></script>
+		<!--<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Secular+One&amp;display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">-->
+	  
+		<title>PRJSP</title>
+	  </head>
 <body>
-	<!-- TO DOOOOOOOOOOOOOOOOOOO -->
+	<div id="main" class="container" :class="{visible: isCreated}">
+		<div class="ui inverted dimmer" :class="{active: !isReady}">
+			<div class="ui loader"></div>
+		</div>
+		<div class="ui large top fixed inverted borderless menu">
+			<div class="item">
+				<i class="large yellow radiation icon"></i>
+			</div>
+			<div class="item">
+				<div class="ui inverted header">
+					<div class="content">DAT SPEEDING</div>
+				</div>
+			</div>
+			<div class="right menu">
+				<div class="item">
+					<i class="large sign out link icon" @click="logOut()"></i>
+				</div>
+			</div>
+		</div>
+		<div class="ui large left fixed vertical icon menu">
+			<a class="teal item" :class="{active: activeTab == 'people'}" @click="activeTab = 'people'">
+				<i class="large users icon"></i>
+			</a>
+			<a class="blue item" :class="{active: activeTab == 'inspectors'}" @click="activeTab = 'inspectors'">
+				<i class="large ghost icon"></i>
+			</a>
+			<a class="orange item" :class="{active: activeTab == 'vehicles'}" @click="activeTab = 'vehicles'">
+				<i class="large car icon"></i>
+			</a>
+			<a class="red item" :class="{active: activeTab == 'violations'}" @click="activeTab = 'violations'">
+				<i class="large car crash icon"></i>
+			</a>
+			<a class="violet item" :class="{active: activeTab == 'directories'}" @click="activeTab = 'directories'">
+				<i class="large address book outline icon"></i>
+			</a>
+		</div>
+		<transition name="fade" mode="out-in">
+			<div class="ui divided centered grid" :key="'people'" v-if="activeTab == 'people'">
+				<transition name="fade" mode="out-in">
+					<div class="side absolute" v-if="forms.people.visible" :key="'ePerson'">
+						<div class="ui inverted dimmer active">
+							<div class="ui centered divided grid">
+								<div class="row">
+									<div class="eight wide column"></div>
+									<div class="eight wide column">
+										<div class="ui segments flex-c">
+											<div class="ui segment">
+												<div class="flex-r">
+													<div class="centered flex-1">
+														<div class="ui small header">
+															<i class="user icon"></i>
+															<div class="content">{{forms.people.data.id == null ? 'New' : 'Save'}} person</div>
+														</div>
+													</div>
+													<div class="centered">
+														<i class="large close link icon" @click="forms.people.visible = false"></i>
+													</div>
+												</div>
+											</div>
+											<div class="ui segment flex-1">
+												<div class="ui small form">
+													<div class="field" :class="{warning: isEmpty(forms.people.data.lastName)}">
+														<label>Last name</label>
+														<input type="text" placeholder="..." v-model="forms.people.data.lastName"/>
+													</div>
+													<div class="field" :class="{warning: isEmpty(forms.people.data.firstName)}">
+														<label>First name</label>
+														<input type="text" placeholder="..." v-model="forms.people.data.firstName"/>
+													</div>
+													<div class="field">
+														<label>Middle name</label>
+														<input type="text" placeholder="..." v-model="forms.people.data.middleName"/>
+													</div>
+													<div class="fields">
+														<div class="field" :class="{warning: isEmpty(forms.people.data.bornDate)}">
+															<label>Born date</label>
+															<calendar-date :date="forms.people.data.bornDate"
+																			@updated="function(data) {forms.people.data.bornDate = data}"></calendar-date>
+														</div>
+														<div class="sixteen wide field">
+															<label>Personal number</label>
+															<input type="text" placeholder="..." v-model="forms.people.data.personalNumber"/>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="ui right aligned segment">
+												<div class="ui right labeled blue icon button" :class="{disabled: !isPersonFormValid}"
+													 @click="saveForm('people')">
+													Save
+													<i class="save icon"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+				<div class="row">
+					<div class="column">
+						<div class="ui basic flex-c segments">
+							<div class="ui segment">
+								<div class="flex-r">
+									<div class="centered">
+										<div class="ui header">
+											<i class="users icon"></i>
+											<div class="content">Personal data</div>
+										</div>
+									</div>
+									<div class="centered flex-1">
+										<div class="ui fluid circular icon search input">
+											<input class="prompt" type="text" placeholder="..." @keyup.enter="doSearch(event.target.value)"/>
+											<i class="blue search icon"></i>
+										</div>
+									</div>
+									<div class="centered" v-if="!isRedirectionActive(['inspectors', 'violations'])">
+										<div class="ui primary icon button" @click="clearForm('people')"><i class="plus icon"></i></div>
+									</div>
+									<div class="centered" v-if="isRedirectionActive(['inspectors', 'violations'])">
+										<div class="ui google plus icon button" @click="clearRedirection()"><i class="chevron right icon"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="ui segment flex-1">
+								<table class="ui unstackable very basic single line selectable table">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
+											<th class="center aligned">Name</th>
+											<th class="center aligned">Born</th>
+											<th class="center aligned">Personal&nbsp;number</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in grids.people.list.data"
+											@click="function() {if (!isRedirectionActive(['inspectors', 'violations'])) {openForm('people', val)} else {resolveRedirect(val)}}">
+											<td class="collapsing center aligned">{{gridStats.people.startWith+ key}}</td>
+											<td class="left aligned">{{val.lastName + ' ' + val.firstName + ' ' + emptyVal(val.middleName)}}</td>
+											<td class="collapsing center aligned">{{val.bornDate}}</td>
+											<td class="collapsing center aligned">{{val.personalNumber}}</td>
+										</tr>
+										<tr v-for="n in gridStats.people.empty"><td colspan="4">-</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned segment">
+								<div class="flex-r">
+									<div class="centered">~ {{grids.people.list.count}}</div>
+									<div class="flex-1">
+										<div class="ui small compact menu" :style="{visibility: gridStats.people.pages < 2 ? 'hidden' : 'visible'}">
+											<a class="item" :class="{disabled: grids.people.list.page == 1}"
+															@click="getList(grids.people.list.page - 1)">
+															<i class="small chevron left icon"></i>
+											</a>
+											<a class="item" :class="{disabled: grids.people.list.page == gridStats.people.pages}"
+															@click="getList(grids.people.list.page + 1)">
+															<i class="small chevron right icon"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui divided centered grid" :key="'inspectors'" v-if="activeTab == 'inspectors'">
+				<transition name="fade" mode="out-in">
+					<div class="side absolute" v-if="forms.inspectors.visible" :key="'eInspector'">
+						<div class="ui inverted dimmer active">
+							<div class="ui centered divided grid">
+								<div class="row">
+									<div class="eight wide column"></div>
+									<div class="eight wide column">
+										<div class="ui segments flex-c">
+											<div class="ui segment">
+												<div class="flex-r">
+													<div class="centered flex-1">
+														<div class="ui small header">
+															<i class="ghost icon"></i>
+															<div class="content">{{forms.inspectors.data.id == null ? 'New' : 'Save'}} inspector</div>
+														</div>
+													</div>
+													<div class="centered">
+														<i class="large close link icon" @click="forms.inspectors.visible = false"></i>
+													</div>
+												</div>
+											</div>
+											<div class="ui segment flex-1">
+												<div class="ui small form">
+													<div class="field" :class="{warning: isEmpty(forms.inspectors.data.person.lastName)}">
+														<label>Last name</label>
+														<input type="text" placeholder="..." v-model="forms.inspectors.data.person.lastName"/>
+													</div>
+													<div class="field" :class="{warning: isEmpty(forms.inspectors.data.person.firstName)}">
+														<label>First name</label>
+														<input type="text" placeholder="..." v-model="forms.inspectors.data.person.firstName"/>
+													</div>
+													<div class="field">
+														<label>Middle name</label>
+														<input type="text" placeholder="..." v-model="forms.inspectors.data.person.middleName"/>
+													</div>
+													<div class="fields">
+														<div class="field" :class="{warning: isEmpty(forms.inspectors.data.person.bornDate)}">
+															<label>Born date</label>
+															<calendar-date :date="forms.inspectors.data.person.bornDate"
+																			@updated="function(data) {forms.inspectors.data.person.bornDate = data}"></calendar-date>
+														</div>
+														<div class="sixteen wide field">
+															<label>Personal number</label>
+															<input type="text" placeholder="..." v-model="forms.inspectors.data.person.personalNumber"/>
+														</div>
+													</div>
+													<div class="ui divider"></div>
+													<div class="inline fields">
+														<div class="field">
+															<div class="ui circular black icon button" @click="setRedirection('people')"><i class="search icon"></i></div>
+															<label>Select existing person</label>
+														</div>
+													</div>
+													<div class="ui divider"></div>
+													<div class="field" :class="{warning: isEmpty(forms.inspectors.data.badgeNumber)}">
+														<label>Badge number</label>
+														<input type="text" placeholder="..." v-model="forms.inspectors.data.badgeNumber"/>
+													</div>
+													<div class="field">
+														<label>Rank</label>
+														<dropdown-frm :data="{list: dropdownLists.ranks, value: forms.inspectors.data.rank}"
+																	  @updated="function(e) {forms.inspectors.data.rank = e;}"
+																	  :class="'clearable'"></dropdown-frm>
+													</div>
+													<div class="field">
+														<label>Department</label>
+														<dropdown-frm :data="{list: dropdownLists.departments, value: forms.inspectors.data.department}"
+																	  @updated="function(e) {forms.inspectors.data.department = e;}"
+																	  :class="'clearable'"></dropdown-frm>
+													</div>
+												</div>
+											</div>
+											<div class="ui right aligned segment">
+												<div class="ui right labeled blue icon button" :class="{disabled: !isInspectorFormValid}"
+													@click="saveForm('inspectors')">
+													Save
+													<i class="save icon"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+				<div class="row">
+					<div class="column">
+						<div class="ui basic flex-c segments">
+							<div class="ui segment">
+								<div class="flex-r">
+									<div class="centered">
+										<div class="ui header">
+											<i class="ghost icon"></i>
+											<div class="content">Inspectors</div>
+										</div>
+									</div>
+									<div class="centered flex-1">
+										<div class="ui fluid circular icon search input" @keyup.enter="doSearch(event.target.value)">
+											<input class="prompt" type="text" placeholder="..." />
+											<i class="blue search icon"></i>
+										</div>
+									</div>
+									<div class="centered">
+										<div class="ui primary icon button" @click="clearForm('inspectors')"><i class="plus icon"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="ui segment flex-1">
+								<table class="ui unstackable very basic single line selectable table">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned">#</th>
+											<th class="left aligned">Name</th>
+											<th class="collapsing left aligned">Badge</th>
+											<th class="collapsing left aligned">Rank</th>
+											<th class="collapsing left aligned">Department</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in grids.inspectors.list.data" @click="openForm('inspectors', val)">
+											<td class="collapsing center aligned">{{gridStats.inspectors.startWith+ key}}</td>
+											<td class="left aligned">{{val.person.lastName + ' ' + val.person.firstName + ' ' + emptyVal(val.person.middleName)}}</td>
+											<td class="collapsing left aligned">{{val.badgeNumber}}</td>
+											<td class="collapsing left aligned">{{getDirEntry('ranks', val.rank)}}</td>
+											<td class="collapsing left aligned">{{getDirEntry('departments', val.department)}}</td>
+										</tr>
+										<tr v-for="n in gridStats.inspectors.empty"><td colspan="5">-</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned segment">
+								<div class="flex-r">
+									<div class="centered">~ {{grids.inspectors.list.count}}</div>
+									<div class="flex-1">
+										<div class="ui small compact menu" :style="{visibility: gridStats.inspectors.pages < 2 ? 'hidden' : 'visible'}">
+											<a class="item" :class="{disabled: grids.inspectors.list.page == 1}"
+															@click="getList(grids.inspectors.list.page - 1)">
+															<i class="small chevron left icon"></i>
+											</a>
+											<a class="item" :class="{disabled: grids.inspectors.list.page == gridStats.inspectors.pages}"
+															@click="getList(grids.inspectors.list.page + 1)">
+															<i class="small chevron right icon"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui divided centered grid" :key="'vehicles'" v-if="activeTab == 'vehicles'">
+				<transition name="fade" mode="out-in">
+					<div class="side absolute" v-if="forms.vehicles.visible" :key="'eVehicle'">
+						<div class="ui inverted dimmer active">
+							<div class="ui centered divided grid">
+								<div class="row">
+									<div class="eight wide column"></div>
+									<div class="eight wide column">
+										<div class="ui segments flex-c">
+											<div class="ui segment">
+												<div class="flex-r">
+													<div class="centered flex-1">
+														<div class="ui small header">
+															<i class="car icon"></i>
+															<div class="content">{{forms.vehicles.data.id == null ? 'New' : 'Save'}} vehicle</div>
+														</div>
+													</div>
+													<div class="centered">
+														<i class="large close link icon" @click="forms.vehicles.visible = false"></i>
+													</div>
+												</div>
+											</div>
+											<div class="ui segment flex-1">
+												<div class="ui small form">
+													<div class="field" :class="{warning: isEmpty(forms.vehicles.data.vin)}">
+														<label>VIN</label>
+														<input type="text" placeholder="..." v-model="forms.vehicles.data.vin"/>
+													</div>
+													<div class="field" :class="{warning: isEmpty(forms.vehicles.data.regNumber)}">
+														<label>Registration number</label>
+														<input type="text" placeholder="..." v-model="forms.vehicles.data.regNumber"/>
+													</div>
+													<div class="field">
+														<label>Model</label>
+														<dropdown-frm :data="{list: dropdownLists.models, value: forms.vehicles.data.model}"
+																	  @updated="function(e) {forms.vehicles.data.model = e;}"></dropdown-frm>
+													</div>
+													<div class="field">
+														<label>Region</label>
+														<dropdown-frm :data="{list: dropdownLists.regions, value: forms.vehicles.data.region}"
+																	  @updated="function(e) {forms.vehicles.data.region = e;}"
+																	  :class="'clearable'"></dropdown-frm>
+													</div>
+												</div>
+											</div>
+											<div class="ui right aligned segment">
+												<div class="ui right labeled blue icon button" :class="{disabled: !isVehicleFormValid}"
+													 @click="saveForm('vehicles')">
+													Save
+													<i class="save icon"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+				<div class="row">
+					<div class="column">
+						<div class="ui basic flex-c segments">
+							<div class="ui segment">
+								<div class="flex-r">
+									<div class="centered">
+										<div class="ui header">
+											<i class="car icon"></i>
+											<div class="content">Vehicles</div>
+										</div>
+									</div>
+									<div class="centered flex-1">
+										<div class="ui fluid circular icon search input">
+											<input class="prompt" type="text" placeholder="..." @keyup.enter="doSearch(event.target.value)"/>
+											<i class="blue search icon"></i>
+										</div>
+									</div>
+									<div class="centered" v-if="!isRedirectionActive(['violations'])">
+										<div class="ui primary icon button" @click="clearForm('vehicles')"><i class="plus icon"></i></div>
+									</div>
+									<div class="centered" v-if="isRedirectionActive(['violations'])">
+										<div class="ui google plus icon button" @click="clearRedirection()"><i class="chevron right icon"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="ui segment flex-1">
+								<table class="ui unstackable very basic single line selectable table">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
+											<th class="left aligned">VIN</th>
+											<th class="collapsing left aligned">Reg. number</th>
+											<th class="collapsing left aligned">Model</th>
+											<th class="collapsing left aligned" style="min-width: 120px;">Region</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in grids.vehicles.list.data"
+										@click="function() {if (!isRedirectionActive(['violations'])) {openForm('vehicles', val)} else {resolveRedirect(val)}}">
+											<td class="collapsing center aligned">{{gridStats.people.startWith+ key}}</td>
+											<td class="left aligned">{{val.vin}}</td>
+											<td class="collapsing left aligned">{{val.regNumber}}</td>
+											<td class="collapsing left aligned">{{getDirEntry('models', val.model)}}</td>
+											<td class="collapsing left aligned">{{getDirEntry('regions', val.region)}}</td>
+										</tr>
+										<tr v-for="n in gridStats.vehicles.empty"><td colspan="5">-</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned segment">
+								<div class="flex-r">
+									<div class="centered">~ {{grids.vehicles.list.count}}</div>
+									<div class="flex-1">
+										<div class="ui small compact menu" :style="{visibility: gridStats.vehicles.pages < 2 ? 'hidden' : 'visible'}">
+											<a class="item" :class="{disabled: grids.vehicles.list.page == 1}"
+															@click="getList(grids.vehicles.list.page - 1)">
+															<i class="small chevron left icon"></i>
+											</a>
+											<a class="item" :class="{disabled: grids.vehicles.list.page == gridStats.vehicles.pages}"
+															@click="getList(grids.vehicles.list.page + 1)">
+															<i class="small chevron right icon"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui divided centered grid" :key="'violations'" v-if="activeTab == 'violations'">
+				<div class="row">
+					<div class="column">
+						<div class="ui basic flex-c segments">
+							<div class="ui segment">
+								<div class="flex-r">
+									<div class="centered">
+										<div class="ui header">
+											<i class="car crash icon"></i>
+											<div class="content">Violations</div>
+										</div>
+									</div>
+									<div class="centered flex-1">
+										<div class="ui fluid circular icon search input">
+											<input class="prompt" type="text" placeholder="..." @keyup.enter="doSearch(event.target.value)"/>
+											<i class="blue search icon"></i>
+										</div>
+									</div>
+									<div class="centered">
+										<manual-popup  inline-template :position="'bottom right'" :visible="forms.generation.isActive" @hidden="function() {forms.generation.isActive = false}">
+											<div class="ui google plus icon button m-0" @click="forms.generation.isActive = !forms.generation.isActive"><i class="list ul icon"></i></div>
+										</manual-popup>
+										<div class="ui popup">
+											<div class="ui small form">
+												<div class="field">
+													<div class="flex-r">
+														<div class="centered flex-1">
+															<div class="ui mini blue right labeled icon button" :class="{disabled: !isGenerationOk}" @click="generateCustomRows()">
+																<i class="plus icon"></i> Generate
+															</div>
+															<div class="ui mini google plus right labeled icon button" @click="generateRows()">
+																<i class="list ul icon"></i> 1000000
+															</div>
+															<div class="ui mini orange icon button" @click="clearObject(forms.generation.data)" :class="{disabled: !isGenrationSet}">
+																<i class="sync icon"></i>
+															</div>
+														</div>
+														<div class="centered">
+															<i class="large close link icon" @click="forms.generation.isActive = false"></i>
+														</div>
+													</div>
+												</div>
+												<div class="ui divider"></div>
+												<div class="field">
+													<label>Start date</label>
+													<calendar-date :date="forms.generation.data.start"
+																	@updated="function(e) {forms.generation.data.start = e}"></calendar-date>
+												</div>
+												<div class="field">
+													<label>End date</label>
+													<calendar-date :date="forms.generation.data.end"
+																	@updated="function(e) {forms.generation.data.end = e}"></calendar-date>
+												</div>
+												<div class="field">
+													<label>Limit</label>
+													<input type="number" placeholder="..." v-model="forms.generation.data.limit"/>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="centered">
+										<manual-popup  inline-template :position="'bottom right'" :visible="forms.violations.filterEnabled" @hidden="function() {forms.violations.filterEnabled = false}">
+											<div class="ui black icon button m-0" @click="setFilter()"><i class="filter icon"></i></div>
+										</manual-popup>
+										<div class="ui popup">
+											<div class="ui small form">
+												<div class="field">
+													<div class="flex-r">
+														<div class="centered flex-1">
+															<div class="ui mini blue right labeled icon button"
+																 :class="{disabled: !isReadyForFiltering}"
+																 @click="filterData()">
+																<i class="search icon"></i> Search
+															</div>
+															<div class="ui mini orange icon button" @click="clearFilter()" v-if="forms.violations.isFiltered">
+																<i class="sync icon"></i>
+															</div>
+														</div>
+														<div class="centered">
+															<i class="large close link icon" @click="setFilter()"></i>
+														</div>
+													</div>
+												</div>
+												<div class="ui divider"></div>
+												<div class="field">
+													<label>Violation date</label>
+													<calendar-date :date="forms.violations.data.date"
+																			@updated="function(e) {forms.violations.data.date = e}"></calendar-date>
+												</div>
+												<div class="field">
+													<label>Guilty</label>
+													<div class="ui icon selectable input" @click="setRedirection('people', 'guilty')">
+														<input type="text" placeholder="..." readonly :value="forms.violations.data.guilty.text"/>
+														<i class="close link icon" v-if="!isEmpty(forms.violations.data.guilty.id)"
+																				   @click.stop="clearObject(forms.violations.data.guilty)"></i>
+													</div>
+												</div>
+												<div class="field">
+													<label>Inspector</label>
+													<div class="ui icon selectable input" @click="setRedirection('people', 'inspector')">
+														<input type="text" placeholder="..." readonly :value="forms.violations.data.inspector.text"/>
+														<i class="close link icon" v-if="!isEmpty(forms.violations.data.inspector.id)"
+																				   @click.stop="clearObject(forms.violations.data.inspector)"></i>
+													</div>
+												</div>
+												<div class="field">
+													<label>Vehicle</label>
+													<div class="ui icon selectable input" @click="setRedirection('vehicles', 'vehicle')">
+														<input type="text" placeholder="..." readonly :value="forms.violations.data.vehicle.text"/>
+														<i class="close link icon" v-if="!isEmpty(forms.violations.data.vehicle.id)"
+																				   @click.stop="clearObject(forms.violations.data.vehicle)"></i>
+													</div>
+												</div>
+												<div class="field">
+													<label>Region</label>
+													<dropdown-frm :data="{list: dropdownLists.regions, value: forms.violations.data.region}"
+																	  @updated="function(e) {forms.violations.data.region = e;}"
+																	  :class="'clearable'"></dropdown-frm>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="ui segment flex-1">
+								<table class="ui unstackable very basic single line selectable table">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned">#</th>
+											<th class="collapsing center aligned" style="min-width: 100px">Date</th>
+											<th class="left aligned">Region</th>
+											<th class="collapsing center aligned">Limit</th>
+											<th class="collapsing center aligned">Actual</th>
+											<th class="collapsing center aligned"><i class="exclamation icon"></i></th>
+											<th class="collapsing center aligned">Paid</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in grids.violations.list.data">
+											<td class="collapsing center aligned">{{gridStats.violations.startWith+ key}}</td>
+											<td class="collapsing center aligned">{{val.violationDate}}</td>
+											<td class="left aligned">{{getDirEntry('regions', val.region)}}</td>
+											<td class="collapsing center aligned">{{val.speedLimit}}</td>
+											<td class="collapsing center aligned">{{val.actualSpeed}}</td>
+											<td class="collapsing center aligned">
+												<popup  inline-template :hover="true" :position="'bottom right'">
+													<i class="large blue exclamation circle link icon"></i>
+												</popup>
+												<div class="ui fluid popup ps-0">
+													<div class="ui three column padded relaxed divided grid">
+														<div class="column">
+															<div class="ui small header">
+																<i class="user icon"></i>
+																<div class="content">Guilty</div>
+															</div>
+															<div class="ui left aligned bulleted list">
+																<div class="item">
+																	{{val.guilty.lastName + ' ' + val.guilty.firstName + ' ' + emptyVal(val.guilty.middleName)}}
+																</div>
+																<div class="item">
+																	{{val.guilty.bornDate}}
+																</div>
+																<div class="item" v-if="!isEmpty(val.guilty.personalNumber)">
+																	{{val.guilty.personalNumber}}
+																</div>
+															</div>
+														</div>
+														<div class="column">
+															<div class="ui small header">
+																<i class="car icon"></i>
+																<div class="content">Vehicle</div>
+															</div>
+															<div class="ui left aligned bulleted list">
+																<div class="item">
+																	{{val.vehicle.vin}}
+																</div>
+																<div class="item">
+																	{{val.vehicle.regNumber}}
+																</div>
+																<div class="item" v-if="!isEmpty(val.vehicle.model)">
+																	{{getDirEntry('models', val.vehicle.model)}}
+																</div>
+															</div>
+														</div>
+														<div class="column">
+															<div class="ui small header">
+																<i class="ghost icon"></i>
+																<div class="content">Inspector</div>
+															</div>
+															<div class="ui left aligned bulleted list">
+																<div class="item">
+																	{{val.inspector.person.lastName + ' ' + val.inspector.person.firstName + ' ' + emptyVal(val.inspector.person.middleName)}}
+																</div>
+																<div class="item">
+																	{{val.inspector.badgeNumber}}
+																</div>
+																<div class="item">
+																	{{getDirEntry('ranks', val.inspector.rank)}}
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td class="collapsing center aligned">
+												<i class="green checkmark icon" v-if="val.repaid"></i>
+												<i class="red close icon" v-if="!val.repaid"></i>
+											</td>
+										</tr>
+										<tr v-for="n in gridStats.violations.empty"><td colspan="9">-</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned segment">
+								<div class="flex-r">
+									<div class="centered">~ {{grids.violations.list.count}}</div>
+									<div class="flex-1">
+										<div class="ui small compact menu" :style="{visibility: gridStats.violations.pages < 2 ? 'hidden' : 'visible'}">
+											<a class="item" :class="{disabled: grids.violations.list.page == 1}"
+															@click="getList(grids.violations.list.page - 1)">
+															<i class="small chevron left icon"></i>
+											</a>
+											<a class="item" :class="{disabled: grids.violations.list.page == gridStats.violations.pages}"
+															@click="getList(grids.violations.list.page + 1)">
+															<i class="small chevron right icon"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui divided centered grid" :key="'directories'" v-if="activeTab == 'directories'">
+				<transition name="fade" mode="out-in">
+					<div class="side absolute" v-if="isDirEdited" :key="'dirForm'">
+						<div class="ui inverted dimmer active">
+							<div class="ui centered divided grid">
+								<div class="row">
+									<div class="eight wide column"></div>
+									<div class="eight wide column">
+										<div class="ui segments flex-c">
+											<div class="ui segment">
+												<div class="flex-r">
+													<div class="centered flex-1">
+														<div class="ui small header">
+															<i class="globe europe icon" v-if="activeDir == 'countries'"></i>
+															<i class="map signs icon" v-if="activeDir == 'regions'"></i>
+															<i class="copyright icon" v-if="activeDir == 'marks'"></i>
+															<i class="car icon" v-if="activeDir == 'models'"></i>
+															<i class="user tie icon" v-if="activeDir == 'ranks'"></i>
+															<i class="kaaba icon" v-if="activeDir == 'departments'"></i>
+															<div class="content">New entry</div>
+														</div>
+													</div>
+													<div class="centered">
+														<i class="large close link icon" @click="isDirEdited = false"></i>
+													</div>
+												</div>
+											</div>
+											<div class="ui segment flex-1">
+												<div class="ui small form" v-if="activeDir == 'countries'">
+													<div class="field" :class="{warning: isEmpty(directories.countries.form.title)}">
+														<label>Title</label>
+														<input type="text" placeholder="..." v-model="directories.countries.form.title"/>
+													</div>
+													<div class="field">
+														<label>ISO</label>
+														<input type="text" placeholder="..." v-model="directories.countries.form.iso"/>
+													</div>
+												</div>
+												<div class="ui small form" v-if="activeDir == 'regions'">
+													<div class="field" :class="{warning: isEmpty(directories.regions.form.title)}">
+														<label>Title</label>
+														<input type="text" placeholder="..." v-model="directories.regions.form.title"/>
+													</div>
+													<div class="field">
+														<label>Country</label>
+														<dropdown-frm :data="{list: dropdownLists.countries, value: directories.regions.form.country}"
+																	  @updated="function(e) {directories.regions.form.country = e;}"></dropdown-frm>
+													</div>
+												</div>
+												<div class="ui small form" v-if="activeDir == 'marks'">
+													<div class="field" :class="{warning: isEmpty(directories.marks.form.title)}">
+														<label>Title</label>
+														<input type="text" placeholder="..." v-model="directories.marks.form.title"/>
+													</div>
+												</div>
+												<div class="ui small form" v-if="activeDir == 'models'">
+													<div class="field" :class="{warning: isEmpty(directories.models.form.title)}">
+														<label>Title</label>
+														<input type="text" placeholder="..." v-model="directories.models.form.title"/>
+													</div>
+													<div class="field">
+														<label>Mark</label>
+														<dropdown-frm :data="{list: dropdownLists.marks, value: directories.models.form.mark}"
+																	  @updated="function(e) {directories.models.form.mark = e;}"></dropdown-frm>
+													</div>
+												</div>
+												<div class="ui small form" v-if="activeDir == 'ranks'">
+													<div class="field" :class="{warning: isEmpty(directories.ranks.form.title)}">
+														<label>Title</label>
+														<input type="text" placeholder="..." v-model="directories.ranks.form.title"/>
+													</div>
+												</div>
+												<div class="ui small form" v-if="activeDir == 'departments'">
+													<div class="field" :class="{warning: isEmpty(directories.departments.form.title)}">
+														<label>Title</label>
+														<input type="text" placeholder="..." v-model="directories.departments.form.title"/>
+													</div>
+													<div class="field">
+														<label>Address</label>
+														<input type="text" placeholder="..." v-model="directories.departments.form.address"/>
+													</div>
+												</div>
+											</div>
+											<div class="ui right aligned segment">
+												<div class="ui right labeled blue icon button" :class="{disabled: !isActiveDirValid}"
+													 @click="saveDir()">
+													Save
+													<i class="save icon"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+				<div class="row">
+					<div class="four wide column">
+						<div class="ui blue vertical fluid tabular menu">
+							<a class="item" v-for="(dir, key) in Object.keys(directories)"
+							   :class="{active: dir == activeDir}"
+							   @click="activeDir = dir">{{directories[dir].label}}</a>
+						</div>
+					</div>
+					<div class="twelve wide streched column">
+						<div class="ui basic segments flex-c">
+							<div class="ui segment">
+								<div class="flex-r">
+									<div class="centered">
+										<div class="ui header">
+											<i class="globe europe icon" v-if="activeDir == 'countries'"></i>
+											<i class="map signs icon" v-if="activeDir == 'regions'"></i>
+											<i class="copyright icon" v-if="activeDir == 'marks'"></i>
+											<i class="car icon" v-if="activeDir == 'models'"></i>
+											<i class="user tie icon" v-if="activeDir == 'ranks'"></i>
+											<i class="kaaba icon" v-if="activeDir == 'departments'"></i>
+											<div class="content" v-if="activeDir == 'countries'">Countries</div>
+											<div class="content" v-if="activeDir == 'regions'">Regions</div>
+											<div class="content" v-if="activeDir == 'marks'">Mark</div>
+											<div class="content" v-if="activeDir == 'models'">Models</div>
+											<div class="content" v-if="activeDir == 'ranks'">Ranks</div>
+											<div class="content" v-if="activeDir == 'departments'">Departments</div>
+										</div>
+									</div>
+									<div class="flex-1"></div>
+									<div class="centered">
+										<div class="ui small primary icon button" @click="clearDir()"><i class="plus icon"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="ui segment flex-1">
+								<table class="ui unstackable very basic single line selectable table" v-if="activeDir == 'countries'">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
+											<th class="left aligned">Title</th>
+											<th class="collapsing center aligned" style="width: 50px;">ISO</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in directories.countries.list" @click="openDir(val)"
+											v-if="key >= dirsStats.countries.start && key <= dirsStats.countries.end">
+											<td class="collapsing center aligned">{{key + 1}}</td>
+											<td class="left aligned">{{val.title}}</td>
+											<td class="collapsing center aligned">{{val.iso}}</td>
+										</tr>
+										<tr v-for="n in dirsStats.countries.empty"><td colspan="3">-</td></tr>
+									</tbody>
+								</table>
+								<table class="ui unstackable very basic single line selectable table" v-if="activeDir == 'regions'">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
+											<th class="left aligned">Title</th>
+											<th class="collapsing left aligned">Country</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in directories.regions.list" @click="openDir(val)">
+											<td class="collapsing center aligned">{{key + 1}}</td>
+											<td class="left aligned">{{val.title}}</td>
+											<td class="collapsing left aligned">{{getDirEntry('countries', val.country)}}</td>
+										</tr>
+										<tr v-for="n in dirsStats.regions.empty"><td colspan="3">-</td></tr>
+									</tbody>
+								</table>
+								<table class="ui unstackable very basic single line selectable table" v-if="activeDir == 'marks'">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
+											<th class="center aligned">Title</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in directories.marks.list" @click="openDir(val)"
+											v-if="key >= dirsStats.marks.start && key <= dirsStats.marks.end">
+											<td class="collapsing center aligned">{{key + 1}}</td>
+											<td class="left aligned">{{val.title}}</td>
+										</tr>
+										<tr v-for="n in dirsStats.marks.empty"><td colspan="2">-</td></tr>
+									</tbody>
+								</table>
+								<table class="ui unstackable very basic single line selectable table" v-if="activeDir == 'models'">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
+											<th class="left aligned">Title</th>
+											<th class="collapsing left aligned" style="width: 120px;">Mark</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in directories.models.list" @click="openDir(val)">
+											<td class="collapsing center aligned">{{key + 1}}</td>
+											<td class="left aligned">{{val.title}}</td>
+											<td class="collapsing left aligned">{{getDirEntry('marks', val.mark)}}</td>
+										</tr>
+										<tr v-for="n in dirsStats.models.empty"><td colspan="3">-</td></tr>
+									</tbody>
+								</table>
+								<table class="ui unstackable very basic single line selectable table" v-if="activeDir == 'ranks'">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
+											<th class="left aligned">Title</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in directories.ranks.list" @click="openDir(val)"
+											v-if="key >= dirsStats.ranks.start && key <= dirsStats.ranks.end">
+											<td class="collapsing center aligned">{{key + 1}}</td>
+											<td class="left aligned">{{val.title}}</td>
+										</tr>
+										<tr v-for="n in dirsStats.ranks.empty"><td colspan="2">-</td></tr>
+									</tbody>
+								</table>
+								<table class="ui unstackable very basic single line selectable table" v-if="activeDir == 'departments'">
+									<thead>
+										<tr>
+											<th class="collapsing center aligned" style="width: 40px;">#</th>
+											<th class="left aligned">Title</th>
+											<th class="collapsing left aligned" style="min-width: 140px;">Address</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(val, key) in directories.departments.list" @click="openDir(val)">
+											<td class="collapsing center aligned">{{key + 1}}</td>
+											<td class="left aligned">{{val.title}}</td>
+											<td class="collapsing left aligned">{{val.address}}</td>
+										</tr>
+										<tr v-for="n in dirsStats.departments.empty"><td colspan="3">-</td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned segment">
+								<div class="flex-r">
+									<div class="centered">~ {{directories[activeDir].list.length}}</div>
+									<div class="flex-1">
+										<div class="ui small compact menu" :style="{visibility: dirsStats[activeDir].pages < 2 ? 'hidden' : 'visible'}">
+											<a class="item" :class="{disabled: directories[activeDir].page == 1}"
+															@click="directories[activeDir].page -= 1">
+															<i class="small chevron left icon"></i>
+											</a>
+											<a class="item" :class="{disabled: directories[activeDir].page == dirsStats[activeDir].pages}"
+															@click="directories[activeDir].page += 1">
+															<i class="small chevron right icon"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</transition>
+	</div>
 </body>
 </html>
