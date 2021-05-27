@@ -127,7 +127,7 @@ public class ViolationService {
     public ResponseObject generate() {
         var format = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            repository.generateViolations(30, format.parse("01-01-2000"), format.parse("01-01-2020"));
+            repository.generateViolations(1000000, format.parse("01-01-2000"), format.parse("01-01-2020"));
             return new ResponseObject();
         } catch (ParseException ex) {
             throw new CustomException("Unable to parse the date");
