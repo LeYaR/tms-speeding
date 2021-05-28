@@ -11,20 +11,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="sv_departments")
+@Table(name = "sv_departments")
 public class DepartmentDbo {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="title", length = 100, nullable = false)
+    @Column(name = "title", length = 100, nullable = false)
     private String title;
 
-    @Column(name="address", length = 100)
+    @Column(name = "address", length = 100)
     private String address;
 
     @OneToMany(mappedBy = "department")
     private List<InspectorDbo> inspectors;
+
+    public DepartmentDbo() {
+
+    }
+
+    public DepartmentDbo(String title) {
+        this.title=title;
+    }
 
     public Integer getId() {
         return id;
@@ -58,5 +66,5 @@ public class DepartmentDbo {
         this.inspectors = inspectors;
     }
 
-    
+
 }

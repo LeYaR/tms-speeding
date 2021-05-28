@@ -11,17 +11,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="sv_ranks")
+@Table(name = "sv_ranks")
 public class RankDbo {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="title", length = 100, nullable = false)
+    @Column(name = "title", length = 100, nullable = false)
     private String title;
 
     @OneToMany(mappedBy = "rank")
     private List<InspectorDbo> inspectors;
+
+    public RankDbo() {
+
+    }
+
+    public RankDbo(String rank) {
+        this.title = rank;
+    }
 
     public Integer getId() {
         return id;
@@ -47,5 +55,5 @@ public class RankDbo {
         this.inspectors = inspectors;
     }
 
-    
+
 }

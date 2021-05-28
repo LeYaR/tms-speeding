@@ -40,10 +40,10 @@ class CountryDboTest {
 
         repo.save(country);
 
-        RegionDbo findingRegion = repo.findByTitle(country.getTitle()).getRegions().get(0);
+        RegionDbo findedRegion = repo.findByTitle(country.getTitle()).getRegions().get(0);
 
-        assertThat(findingRegion.getTitle()).isEqualTo("Test");
-        assertThat(findingRegion.getCountry()).isEqualTo(country);
+        assertThat(findedRegion.getTitle()).isEqualTo("Test");
+        assertThat(findedRegion.getCountry()).isEqualTo(country);
     }
 
     @Test

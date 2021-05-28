@@ -1,6 +1,7 @@
 package com.tms.speeding.domain.dbo;
 
 import com.tms.speeding.repository.RegionRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,6 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @DataJpaTest
@@ -26,42 +28,43 @@ class RegionDboTest {
     @Autowired
     private RegionRepository repo;
 
-    @Test
-    public void addRegionTest() {
-        CountryDbo country = entityManager.persist(new CountryDbo("Test", "TST"));
-        RegionDbo region = repo.save(new RegionDbo("Test", country));
+    private CountryDbo country;
+    private RegionDbo region;
 
-        assertThat(region).isNotNull();
-        assertThat(region.getId()).isGreaterThan(0);
-        assertThat(region.getCountry()).isEqualTo(country);
+    @BeforeEach
+    public void setUp() {
+        this.country = entityManager.persist(new CountryDbo("Test", "TST"));
+        this.region = new RegionDbo("test", country);
     }
 
     @Test
-    public void addVehiclesTest() {
-        CountryDbo country = entityManager.persist(new CountryDbo("Test", "TST"));
+    public void createRegionTest() {
+        repo.save(this.region);
+        assertThat(this.region).isNotNull();
+        assertThat(this.region.getId()).isGreaterThan(0);
+        assertThat(this.region.getCountry()).isEqualTo(this.country);
+    }
 
-        RegionDbo region = new RegionDbo();
-        region.setTitle("Midgaard");
-        region.setCountry(country);
+    @Test
+    public void addVehiclesInRegionTest() {
+        repo.save(this.region);
+        this.region.setTitle("Midgaard");
+        this.region.setCountry(this.country);
 
         VehicleDbo vehicle = entityManager.persist(new VehicleDbo("test", "test"));
         List<VehicleDbo> vehicleList = new ArrayList<>();
         vehicleList.add(vehicle);
 
-        region.setVehicles(vehicleList);
+        this.region.setVehicles(vehicleList);
 
-        RegionDbo testRegion = repo.save(region);
+        RegionDbo testRegion = repo.save(this.region);
 
         assertNotNull(testRegion.getVehicles());
         assertThat(testRegion.getVehicles().get(0)).isEqualTo(vehicle);
-
     }
 
     @Test
-    public void addViolationsTest() {
-        CountryDbo country = entityManager.persist(new CountryDbo("Test", "TST"));
-
-        RegionDbo region = new RegionDbo("test", country);
+    public void addViolationsInRegionTest() {
 
         VehicleDbo vehicle = new VehicleDbo("test", "test");
         List<VehicleDbo> vehicleList = new ArrayList<>();
@@ -82,5 +85,12 @@ class RegionDboTest {
 
         assertNotNull(testRegion.getViolations());
         assertThat(testRegion.getViolations().get(0)).isEqualTo(violation);
+    }
+
+    @Test
+    public void deleteRegionTest() {
+
+        repo.delete(this.region);
+        assertNull(repo.findByTitle("test"));
     }
 }

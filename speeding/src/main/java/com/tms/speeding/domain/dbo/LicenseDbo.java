@@ -16,12 +16,12 @@ import javax.persistence.Table;
 import org.springframework.lang.NonNull;
 
 @Entity
-@Table(name="sv_drivers_licenses")
+@Table(name = "sv_drivers_licenses")
 public class LicenseDbo {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     @NonNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
@@ -29,18 +29,28 @@ public class LicenseDbo {
 
     @Column(name = "license_number", length = 30)
     private String licenseNumber;
-    
-    @Column(name="issued", nullable = false)
+
+    @Column(name = "issued", nullable = false)
     private Date issued;
 
-    @Column(name="expires", nullable = false)
+    @Column(name = "expires", nullable = false)
     private Date expires;
 
-    @Column(name="is_revoked")
+    @Column(name = "is_revoked")
     private boolean isRevoked;
 
-    @Column(name="last_revocation")
+    @Column(name = "last_revocation")
     private Date lastRevocation;
+
+    public LicenseDbo() {
+
+    }
+
+    public LicenseDbo(PersonDbo owner, Date issued, Date expires) {
+        this.person = owner;
+        this.issued = issued;
+        this.expires = expires;
+    }
 
     public Integer getId() {
         return id;
@@ -98,5 +108,4 @@ public class LicenseDbo {
         this.lastRevocation = lastRevocation;
     }
 
-    
 }
