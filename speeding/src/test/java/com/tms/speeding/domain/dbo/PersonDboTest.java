@@ -36,7 +36,7 @@ class PersonDboTest {
         this.testPerson.setPersonalNumber("123");
         this.testPerson.setMiddleName("testMiddleName");
         this.testPerson.setBornDate(new Date());
-        repo.save(testPerson);
+        repo.save(this.testPerson);
 
         Optional<PersonDbo> findingPerson = repo.findById(this.testPerson.getId());
         if (findingPerson.isPresent()) {

@@ -14,10 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="sv_vehicle_models")
+@Table(name = "sv_vehicle_models")
 public class VehicleModelDbo {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(length = 50, nullable = false)
@@ -29,6 +29,15 @@ public class VehicleModelDbo {
 
     @OneToMany(mappedBy = "model")
     private List<VehicleDbo> vehicles;
+
+    public VehicleModelDbo() {
+
+    }
+
+    public VehicleModelDbo(String title, VehicleMarkDbo mark) {
+        this.title = title;
+        this.mark = mark;
+    }
 
     public Integer getId() {
         return id;
@@ -61,6 +70,4 @@ public class VehicleModelDbo {
     public void setVehicles(List<VehicleDbo> vehicles) {
         this.vehicles = vehicles;
     }
-
-    
 }
