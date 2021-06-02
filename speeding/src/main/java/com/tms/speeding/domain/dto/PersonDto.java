@@ -3,10 +3,8 @@ package com.tms.speeding.domain.dto;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PersonDto {
-    @JsonProperty("id")
     private Integer id;
     private String lastName;
     private String firstName;

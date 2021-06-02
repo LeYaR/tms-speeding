@@ -25,10 +25,10 @@ public interface InspectorRepository extends PagingAndSortingRepository<Inspecto
                                 + " or lower(c.title) like %?1%"
                                 + " or lower(d.title) like %?1%)";
     
-     String QUERY_CHECK = "select * from sv_inspectors where"
-                        + " person_id = ?#{#inspector.person.id}"
-                        + " or lower(badge_number) = lower(?#{#inspector.badgeNumber})"
-                        + " or id = ?#{#inspector.id}";
+     String QUERY_CHECK = "select i from InspectorDbo i left join i.person p where"
+                        + " p.id = ?#{#inspector.person.id}"
+                        + " or lower(i.badgeNumber) = lower(?#{#inspector.badgeNumber})"
+                        + " or i.id = ?#{#inspector.id}";
 
     @Query(value = "select a.*" + QUERY_BASE, nativeQuery = true)
     Iterable<InspectorDbo> findByAll(String search);
@@ -39,6 +39,6 @@ public interface InspectorRepository extends PagingAndSortingRepository<Inspecto
     @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(1)" + QUERY_BASE, nativeQuery = true)
     Page<InspectorDbo> findByAll(String search, Pageable pageable);
 
-    @Query(value = QUERY_CHECK, nativeQuery = true)
+    @Query(value = QUERY_CHECK)
     Optional<InspectorDbo> findByAll(@Param("inspector") InspectorDto inspector);
 }

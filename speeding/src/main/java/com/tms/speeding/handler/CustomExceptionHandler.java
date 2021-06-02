@@ -11,15 +11,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
-        Logger.getLogger(RuntimeException.class.getName()).log(Level.SEVERE, null, ex);
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
     @ExceptionHandler({CustomException.class})
     public ResponseEntity<String> handleCustomException(CustomException ex) {
         Logger.getLogger(CustomException.class.getName()).log(Level.SEVERE, null, ex);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({RuntimeException.class})
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        Logger.getLogger(RuntimeException.class.getName()).log(Level.SEVERE, null, ex);
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

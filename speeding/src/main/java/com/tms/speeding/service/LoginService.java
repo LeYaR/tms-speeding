@@ -4,6 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.xml.bind.DatatypeConverter;
 
 import com.tms.speeding.domain.dbo.LoginDbo;
@@ -22,10 +24,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService {
 
+    private final EntityManager entityManager;
     private final LoginRepository repository;
 
-    public LoginService (LoginRepository repository) {
+    public LoginService (LoginRepository repository, EntityManager entityManager) {
         this.repository = repository;
+        this.entityManager = entityManager;
     }
 
     private void setUser (String login, String password) {
@@ -46,23 +50,36 @@ public class LoginService {
         }
     }
 
+    static final String QUERY_C = "select p from LoginDbo p where lower(p.login) = lower(:login)"
+                + " and lower(p.password) = lower(:password)";
+
+    public LoginDbo checkLogin(String login, String password) {
+        TypedQuery<LoginDbo> query = entityManager.createQuery(QUERY_C, LoginDbo.class);
+        query.setParameter("login", login).setParameter("password", password).setMaxResults(1);
+        return query.getResultList().isEmpty() ? null : query.getSingleResult();
+    }
+
+    public LoginDbo findExisting(String login) {
+        TypedQuery<LoginDbo> query = entityManager.createQuery("select p from LoginDbo p where lower(login) = lower(:login)", LoginDbo.class);
+        query.setParameter("login", login).setMaxResults(1);
+        return query.getResultList().isEmpty() ? null : query.getSingleResult();
+    }
+
     public ResponseObject logIn(String login, String password) {
         String hash = getHash(password);
-        Optional<LoginDbo> request = repository.checkLogin(login, hash);
-        if (request.isEmpty()) {
+        LoginDbo user = checkLogin(login, hash);
+        if (user == null) {
             return new ResponseObject(false, "error", "Invalid login credentials");
         }
-        var existing = request.get();
-        existing.setLastVisit(new Date());
-        repository.save(existing);
+        user.setLastVisit(new Date());
+        repository.save(user);
         setUser(login, password);
-
         return new ResponseObject();
     }
 
     public ResponseObject regIn(String login, String password) {
-        Optional<LoginDbo> request = repository.findExisting(login);
-        if (request.isPresent()) {
+        LoginDbo entry = findExisting(login);
+        if (entry != null) {
             return new ResponseObject(false, "error", "Such login already exists");
         }
         var user = new LoginDbo(login, getHash(password), new Date(), new Date());

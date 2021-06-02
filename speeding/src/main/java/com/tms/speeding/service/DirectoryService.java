@@ -1,5 +1,6 @@
 package com.tms.speeding.service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -34,36 +35,79 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DirectoryService {
-    @Autowired
     private CountryRepository countryRepository;
-    @Autowired
     private CountryMapper countryMapper;
-    
-    @Autowired
     private RegionRepository regionRepository;
-    @Autowired
     private RegionMapper regionMapper;
-
-    @Autowired
     private VehicleMarkRepository markRepository;
-    @Autowired
     private VehicleMarkMapper markMapper;
-
-    @Autowired
     private VehicleModelRepository modelRepository;
-    @Autowired
     private VehicleModelMapper modelMapper;
-
-    @Autowired
     private RankRepository rankRepository;
-    @Autowired
     private RankMapper rankMapper;
+    private DepartmentRepository departmentRepository;
+    private DepartmentMapper departmentMapper;
 
     @Autowired
-    private DepartmentRepository departmentRepository;
+    public void setCountryRepository(CountryRepository countryRepository) {
+        this.countryRepository = countryRepository;
+    }
+
     @Autowired
-    private DepartmentMapper departmentMapper;
-    
+    public void setCountryMapper(CountryMapper countryMapper) {
+        this.countryMapper = countryMapper;
+    }
+
+    @Autowired
+    public void setRegionRepository(RegionRepository regionRepository) {
+        this.regionRepository = regionRepository;
+    }
+
+    @Autowired
+    public void setRegionMapper(RegionMapper regionMapper) {
+        this.regionMapper = regionMapper;
+    }
+
+    @Autowired
+    public void setMarkRepository(VehicleMarkRepository markRepository) {
+        this.markRepository = markRepository;
+    }
+
+    @Autowired
+    public void setMarkMapper(VehicleMarkMapper markMapper) {
+        this.markMapper = markMapper;
+    }
+
+    @Autowired
+    public void setModelRepository(VehicleModelRepository modelRepository) {
+        this.modelRepository = modelRepository;
+    }
+
+    @Autowired
+    public void setModelMapper(VehicleModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
+
+    @Autowired
+    public void setRankRepository(RankRepository rankRepository) {
+        this.rankRepository = rankRepository;
+    }
+
+    @Autowired
+    public void setRankMapper(RankMapper rankMapper) {
+        this.rankMapper = rankMapper;
+    }
+
+    @Autowired
+    public void setDepartmentRepository(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
+    }
+
+    @Autowired
+    public void setDepartmentMapper(DepartmentMapper departmentMapper) {
+        this.departmentMapper = departmentMapper;
+    }
+
     private static final String TITLE_SORT = "title";
 
     public DirectoryDto getDirectories () {
@@ -77,7 +121,7 @@ public class DirectoryService {
         return result;
     }
 
-    public Iterable<CountryDto> save(CountryDto object) {
+    public List<CountryDto> save(CountryDto object) {
         if (object.getId() == null) {
             countryRepository.save(countryMapper.toEntity(object));
         } else {
@@ -94,7 +138,7 @@ public class DirectoryService {
         return getAllCountries();
     }
 
-    public Iterable<RegionDto> save(RegionDto object) {
+    public List<RegionDto> save(RegionDto object) {
         if (object.getId() == null) {
             regionRepository.save(regionMapper.toEntity(object));
         } else {
@@ -115,7 +159,7 @@ public class DirectoryService {
         return getAllRegions();
     }
 
-    public Iterable<VehicleModelDto> save(VehicleModelDto object) {
+    public List<VehicleModelDto> save(VehicleModelDto object) {
         if (object.getId() == null) {
             modelRepository.save(modelMapper.toEntity(object));
         } else {
@@ -136,42 +180,42 @@ public class DirectoryService {
         return getAllModels();
     }
 
-    public Iterable<VehicleMarkDto> save(VehicleMarkDto object) {
+    public List<VehicleMarkDto> save(VehicleMarkDto object) {
         markRepository.save(markMapper.toEntity(object));
         return getAllMarks();
     }
 
-    public Iterable<RankDto> save(RankDto object) {
+    public List<RankDto> save(RankDto object) {
         rankRepository.save(rankMapper.toEntity(object));
         return getAllRanks();
     }
 
-    public Iterable<DepartmentDto> save(DepartmentDto object) {
+    public List<DepartmentDto> save(DepartmentDto object) {
         departmentRepository.save(departmentMapper.toEntity(object));
         return getAllDepartments();
     }
 
-    public Iterable<CountryDto> getAllCountries() {
+    public List<CountryDto> getAllCountries() {
         return countryMapper.toDtoList(countryRepository.findAll(Sort.by(TITLE_SORT)));
     }
 
-    public Iterable<RegionDto> getAllRegions() {
+    public List<RegionDto> getAllRegions() {
         return regionMapper.toDtoList(regionRepository.findAll(Sort.by(TITLE_SORT)));
     }
 
-    public Iterable<VehicleMarkDto> getAllMarks() {
+    public List<VehicleMarkDto> getAllMarks() {
         return markMapper.toDtoList(markRepository.findAll(Sort.by(TITLE_SORT)));
     }
 
-    public Iterable<VehicleModelDto> getAllModels() {
+    public List<VehicleModelDto> getAllModels() {
         return modelMapper.toDtoList(modelRepository.findAll(Sort.by(TITLE_SORT)));
     }
 
-    public Iterable<RankDto> getAllRanks() {
+    public List<RankDto> getAllRanks() {
         return rankMapper.toDtoList(rankRepository.findAll(Sort.by(TITLE_SORT)));
     }
 
-    public Iterable<DepartmentDto> getAllDepartments() {
+    public List<DepartmentDto> getAllDepartments() {
         return departmentMapper.toDtoList(departmentRepository.findAll(Sort.by(TITLE_SORT)));
     }
 }

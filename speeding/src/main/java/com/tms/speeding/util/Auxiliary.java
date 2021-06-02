@@ -1,6 +1,7 @@
 package com.tms.speeding.util;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Auxiliary {
@@ -17,7 +18,7 @@ public class Auxiliary {
         return property == null || property.isEmpty() || property.isBlank();
     }
 
-    public static <T>ResponseObject prepareListResponse (long count, Iterable<T> list) {
+    public static <T>ResponseObject prepareListResponse (long count, List<T> list) {
         Map<String, Object> result = new HashMap<>();
         result.put("count", count);
         result.put("list", list);

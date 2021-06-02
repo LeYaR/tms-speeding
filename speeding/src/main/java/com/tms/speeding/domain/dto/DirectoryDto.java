@@ -1,61 +1,63 @@
 package com.tms.speeding.domain.dto;
 
-public class DirectoryDto {
-    Iterable<CountryDto> countries;
-    Iterable<RegionDto> regions;
-    Iterable<VehicleMarkDto> marks;
-    Iterable<VehicleModelDto> models;
-    Iterable<RankDto> ranks;
-    Iterable<DepartmentDto> departments;
-    Iterable<CountryDto> countriesAll;
-    Iterable<VehicleMarkDto> marksAll;
+import java.util.List;
 
-    public Iterable<CountryDto> getCountries() {
+public class DirectoryDto {
+    List<CountryDto> countries;
+    List<RegionDto> regions;
+    List<VehicleMarkDto> marks;
+    List<VehicleModelDto> models;
+    List<RankDto> ranks;
+    List<DepartmentDto> departments;
+    List<CountryDto> countriesAll;
+    List<VehicleMarkDto> marksAll;
+
+    public List<CountryDto> getCountries() {
         return countries;
     }
-    public void setCountries(Iterable<CountryDto> countries) {
+    public void setCountries(List<CountryDto> countries) {
         this.countries = countries;
     }
-    public Iterable<RegionDto> getRegions() {
+    public List<RegionDto> getRegions() {
         return regions;
     }
-    public void setRegions(Iterable<RegionDto> regions) {
+    public void setRegions(List<RegionDto> regions) {
         this.regions = regions;
     }
-    public Iterable<VehicleMarkDto> getMarks() {
+    public List<VehicleMarkDto> getMarks() {
         return marks;
     }
-    public void setMarks(Iterable<VehicleMarkDto> marks) {
+    public void setMarks(List<VehicleMarkDto> marks) {
         this.marks = marks;
     }
-    public Iterable<VehicleModelDto> getModels() {
+    public List<VehicleModelDto> getModels() {
         return models;
     }
-    public void setModels(Iterable<VehicleModelDto> models) {
+    public void setModels(List<VehicleModelDto> models) {
         this.models = models;
     }
-    public Iterable<RankDto> getRanks() {
+    public List<RankDto> getRanks() {
         return ranks;
     }
-    public void setRanks(Iterable<RankDto> ranks) {
+    public void setRanks(List<RankDto> ranks) {
         this.ranks = ranks;
     }
-    public Iterable<DepartmentDto> getDepartments() {
+    public List<DepartmentDto> getDepartments() {
         return departments;
     }
-    public void setDepartments(Iterable<DepartmentDto> departments) {
+    public void setDepartments(List<DepartmentDto> departments) {
         this.departments = departments;
     }
-    public Iterable<CountryDto> getCountriesAll() {
+    public List<CountryDto> getCountriesAll() {
         return countriesAll;
     }
-    public void setCountriesAll(Iterable<CountryDto> countriesAll) {
+    public void setCountriesAll(List<CountryDto> countriesAll) {
         this.countriesAll = countriesAll;
     }
-    public Iterable<VehicleMarkDto> getMarksAll() {
+    public List<VehicleMarkDto> getMarksAll() {
         return marksAll;
     }
-    public void setMarksAll(Iterable<VehicleMarkDto> marksAll) {
+    public void setMarksAll(List<VehicleMarkDto> marksAll) {
         this.marksAll = marksAll;
     }
 

@@ -35,40 +35,7 @@ public interface ViolationRepository extends PagingAndSortingRepository<Violatio
     @Query(value = "select a.*" + QUERY_BASE, countQuery = "select count(1)" + QUERY_BASE, nativeQuery = true)
     Page<ViolationDbo> findByAll(String search, Pageable pageable);
 
-     String QUERY_GEN = "insert into sv_violations (violation_date, region_id, speed_limit,"
-                            + " actual_speed, guilty_id, vehicle_id, caught_by, is_repaid, note)"
-                            + " with recursive seq as ("
-                            + " select 1 lvl"
-                            + " union all"
-                            + " select lvl + 1 from seq where lvl < ?1"
-                            + " ), rng as ("
-                            + " select str_to_date(date_format(from_unixtime(a.d_start + floor(rand() * a.d_range)), '%d-%m-%Y'), '%d-%m-%Y') rand_date"
-                            + " from (select unix_timestamp(str_to_date('01-01-2020', '%d-%m-%Y')) d_start,"
-                            + " (unix_timestamp(str_to_date('31-01-2020', '%d-%m-%Y')) - unix_timestamp(str_to_date('01-01-2020', '%d-%m-%Y'))) d_range) a"
-                            + " ), notes as ("
-                            + " select null text"
-                            + " union all select 'stop you there'"
-                            + " union all select 'another day - another violation'"
-                            + " union all select 'crazy fast'"
-                            + " union all select 'pathetic note'"
-                            + " union all select 'caught finally'"
-                            + " union all select 'next time, buddy'"
-                            + " union all select 'paid'"
-                            + " union all select 'random row'"
-                            + " ), pre as ("
-                            + " select b.rand_date dt,"
-                            + " (select id from sv_regions order by rand() limit 1) rg,"
-                            + " floor(50 + rand() * 30) li,"
-                            + " (select id from sv_people order by rand() limit 1) gu,"
-                            + " (select id from sv_vehicles order by rand() limit 1) ve,"
-                            + " round(rand()) re,"
-                            + " (select text from notes order by rand() limit 1) nt"
-                            + " from seq a, rng b"
-                            + " ) select a.dt, a.rg, a.li, a.li + floor(a.li + rand() * 20) ac,"
-                            + " a.gu, a.ve, (select id from sv_inspectors where id != a.gu order by rand() limit 1) ch,"
-                            + " a.re, a.nt from pre a";
-
-     String QUERY_GEN_MOAR = "call generateViolations(?1, ?2, ?3)";
+    String QUERY_GEN_MOAR = "call generateViolations(?1, ?2, ?3)";
 
     @Modifying
     @Query(value = QUERY_GEN_MOAR, nativeQuery = true)

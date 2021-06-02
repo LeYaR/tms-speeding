@@ -35,13 +35,9 @@ var main = new Vue({
             this.loginMode = true;
         },
         logIn: function() {
-            let obj = {password: this.password};
-            if (!this.loginMode) {
-                obj.new = this.login;
-            } else {
-                obj.old = this.login;
-            }
-            $.post('process', obj).then(function(data) {
+            let obj = {login: this.login, password: this.password};
+            let url = !this.loginMode ? "registration/": "login/";
+            $.post(url, obj).then(function(data) {
                 if (data.success) {
                     window.location.href = "../";
                 } else {

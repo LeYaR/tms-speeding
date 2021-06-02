@@ -13,12 +13,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface PersonRepository extends PagingAndSortingRepository<PersonDbo, Integer> {
 
-     String QUERY_BASE = " from sv_people where"
-                        + " lower(last_name) like %?1%"
-                        + " or lower(first_name) like %?1%"
-                        + " or lower(middle_name) like %?1%"
-                        + " or lower(identification_number) like %?1%"
-                        + " or date_format(born, '%d-%m-%Y') like %?1%";
+     String QUERY_BASE = " from PersonDbo p where"
+                        + " lower(p.lastName) like %?1%"
+                        + " or lower(p.firstName) like %?1%"
+                        + " or lower(p.middleName) like %?1%"
+                        + " or lower(p.personalNumber) like %?1%"
+                        + " or date_format(p.bornDate, '%d-%m-%Y') like %?1%";
     
      String QUERY_CHECK = "select * from sv_people where"
                         + " lower(last_name) = lower(?#{#person.lastName})"
@@ -27,13 +27,13 @@ public interface PersonRepository extends PagingAndSortingRepository<PersonDbo, 
                         + " or lower(identification_number) = lower(?#{#person.personalNumber})"
                         + " or id = ?#{#person.id} limit 1";
 
-    @Query(value = "select *" + QUERY_BASE, nativeQuery = true)
+    @Query(value = "select p" + QUERY_BASE)
     Iterable<PersonDbo> findByAll(String search);
 
-    @Query(value = "select count(1)" + QUERY_BASE, nativeQuery = true)
+    @Query(value = "select count(*)" + QUERY_BASE)
     long countBySearch(String search);
 
-    @Query(value = "select *" + QUERY_BASE, countQuery = "select count(1)" + QUERY_BASE, nativeQuery = true)
+    @Query(value = "select p" + QUERY_BASE, countQuery = "select count(*)" + QUERY_BASE)
     Page<PersonDbo> findByAll(String search, Pageable pageable);
 
     @Query(value = QUERY_CHECK, nativeQuery = true)
