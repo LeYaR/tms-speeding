@@ -1,13 +1,12 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.VehicleRepository;
+import com.tms.speeding.domain.dbo.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,11 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class VehicleDboTest {
+class VehicleRepositoryTest {
     @Autowired
     private VehicleRepository repo;
     @Autowired
@@ -27,13 +25,14 @@ class VehicleDboTest {
 
     private VehicleDbo vehicle;
 
+
     @BeforeEach
     public void setUp() {
         this.vehicle = entityManager.persist(new VehicleDbo("TestReg", "TestVin"));
     }
 
     @Test
-    public void createVehicleTest() {
+    public void shouldPassedIfCreatingVehicleIsSuccessful() {
         repo.save(this.vehicle);
 
         this.vehicle.setModel(new VehicleModelDbo("Test", new VehicleMarkDbo("Test")));
@@ -46,7 +45,7 @@ class VehicleDboTest {
     }
 
     @Test
-    public void setRegionTest() {
+    public void shouldPassedIfSettingRegionToVehicleIsSuccessful() {
 
         RegionDbo region = new RegionDbo("CurrentRegion");
         this.vehicle.setRegion(region);
@@ -59,7 +58,7 @@ class VehicleDboTest {
     }
 
     @Test
-    public void setModelTest() {
+    public void shouldPassedIfSettingModelsToVehicleIsSuccessful() {
         VehicleMarkDbo mark = new VehicleMarkDbo("LADA");
         VehicleModelDbo model = new VehicleModelDbo("Vesta", mark);
 
@@ -73,7 +72,7 @@ class VehicleDboTest {
     }
 
     @Test
-    public void setViolationsTest() {
+    public void shouldPassedIfSettingViolationsToVehicleIsSuccessful() {
 
         InspectorDbo inspector = entityManager.persist(new InspectorDbo(
                 new PersonDbo("Inspector", "Colombo", new Date())));
@@ -100,7 +99,7 @@ class VehicleDboTest {
     }
 
     @Test
-    public void updateVehicleProperties() {
+    public void shouldPassedIfUpdatingVehiclePropertiesIsSuccessful() {
         repo.save(this.vehicle);
 
         Optional<VehicleDbo> findingVehicle = repo.findById(this.vehicle.getId());

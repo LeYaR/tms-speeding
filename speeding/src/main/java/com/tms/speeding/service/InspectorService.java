@@ -44,7 +44,7 @@ public class InspectorService {
 
     public ResponseObject getAll() {
         return Auxiliary.prepareListResponse(repository.count(),
-                                   mapper.toDtoList(repository.findAll()));
+                mapper.toDtoList(repository.findAll()));
     }
 
     public InspectorDto getById(Integer id) {
@@ -54,24 +54,24 @@ public class InspectorService {
 
     public ResponseObject getAllByString(String search) {
         return Auxiliary.prepareListResponse(repository.countBySearch(search),
-                                   mapper.toDtoList(repository.findByAll(search)));
+                mapper.toDtoList(repository.findByAll(search)));
     }
 
     public ResponseObject getAllByPage(Integer page, Integer limit) {
         return Auxiliary.prepareListResponse(repository.count(),
-                                   mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
+                mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
     public ResponseObject getAllByPageAndString(String search, Integer page, Integer limit) {
         return Auxiliary.prepareListResponse(repository.countBySearch(search),
-                                   mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
+                mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
     private boolean validate(InspectorDto object) {
-        return !Auxiliary.isEmpty(object.getBadgeNumber()) &&
-               object.getPerson() != null &&
-               (object.getRank() == null || rRepository.findById(object.getRank()).isPresent()) &&
-               (object.getDepartment() == null || rRepository.findById(object.getDepartment()).isPresent());
+        return !(object.getBadgeNumber().isEmpty()) &&
+                object.getPerson() != null &&
+                (object.getRank() == null || rRepository.findById(object.getRank()).isPresent()) &&
+                (object.getDepartment() == null || rRepository.findById(object.getDepartment()).isPresent());
     }
 
     public ResponseObject save(InspectorDto object) {

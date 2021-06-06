@@ -45,7 +45,6 @@ public class InspectorDbo {
     private List<ViolationDbo> violations;
 
     public InspectorDbo() {
-
     }
 
     public InspectorDbo(PersonDbo person) {
@@ -99,6 +98,4 @@ public class InspectorDbo {
     public void setViolations(List<ViolationDbo> violations) {
         this.violations = violations;
     }
-
-
 }

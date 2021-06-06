@@ -12,13 +12,10 @@ public class Auxiliary {
     public static final String SV_EXISTS = "An existing object with the same data has already been written";
     public static final String RD_FAILED = "Failed to obtain the data";
 
-    private Auxiliary() {}
-
-    public static boolean isEmpty(String property) {
-        return property == null || property.isEmpty() || property.isBlank();
+    private Auxiliary() {
     }
 
-    public static <T>ResponseObject prepareListResponse (long count, List<T> list) {
+    public static <T> ResponseObject prepareListResponse(long count, List<T> list) {
         Map<String, Object> result = new HashMap<>();
         result.put("count", count);
         result.put("list", list);

@@ -34,7 +34,7 @@ public class VehicleService {
 
     public ResponseObject getAll() {
         return Auxiliary.prepareListResponse(repository.count(),
-                                   mapper.toDtoList(repository.findAll()));
+                mapper.toDtoList(repository.findAll()));
     }
 
     public VehicleDto getById(Integer id) {
@@ -44,23 +44,23 @@ public class VehicleService {
 
     public ResponseObject getAllByString(String search) {
         return Auxiliary.prepareListResponse(repository.countBySearch(search),
-                                   mapper.toDtoList(repository.findByAll(search)));
+                mapper.toDtoList(repository.findByAll(search)));
     }
 
     public ResponseObject getAllByPage(Integer page, Integer limit) {
         return Auxiliary.prepareListResponse(repository.count(),
-                                   mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
+                mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
     public ResponseObject getAllByPageAndString(String search, Integer page, Integer limit) {
         return Auxiliary.prepareListResponse(repository.countBySearch(search),
-                                   mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
+                mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
     public boolean validate(VehicleDto object) {
-        return !Auxiliary.isEmpty(object.getVin()) &&
-               !Auxiliary.isEmpty(object.getRegNumber()) &&
-               object.getModel() != null;
+        return !(object.getVin().isEmpty()) &&
+                !(object.getRegNumber().isEmpty()) &&
+                object.getModel() != null;
     }
 
     public ResponseObject save(VehicleDto object) {

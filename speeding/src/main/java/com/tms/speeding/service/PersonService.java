@@ -26,7 +26,7 @@ public class PersonService {
 
     public ResponseObject getAll() {
         return Auxiliary.prepareListResponse(repository.count(),
-                                   mapper.toDtoList(repository.findAll()));
+                mapper.toDtoList(repository.findAll()));
     }
 
     public PersonDto getById(Integer id) {
@@ -36,23 +36,23 @@ public class PersonService {
 
     public ResponseObject getAllByString(String search) {
         return Auxiliary.prepareListResponse(repository.countBySearch(search),
-                                   mapper.toDtoList(repository.findByAll(search)));
+                mapper.toDtoList(repository.findByAll(search)));
     }
 
     public ResponseObject getAllByPage(Integer page, Integer limit) {
         return Auxiliary.prepareListResponse(repository.count(),
-                                   mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
+                mapper.toDtoList(repository.findAll(PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
     public ResponseObject getAllByPageAndString(String search, Integer page, Integer limit) {
         return Auxiliary.prepareListResponse(repository.countBySearch(search),
-                                   mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
+                mapper.toDtoList(repository.findByAll(search, PageRequest.of(Math.max(page - 1, 0), limit)).getContent()));
     }
 
     public boolean validate(PersonDto object) {
-        return !Auxiliary.isEmpty(object.getLastName()) &&
-               !Auxiliary.isEmpty(object.getFirstName()) &&
-               object.getBornDate() != null;
+        return !(object.getLastName().isEmpty()) &&
+                !(object.getFirstName().isEmpty()) &&
+                object.getBornDate() != null;
     }
 
     public ResponseObject save(PersonDto object) {

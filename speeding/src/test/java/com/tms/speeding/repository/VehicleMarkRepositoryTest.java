@@ -1,6 +1,7 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.VehicleMarkRepository;
+import com.tms.speeding.domain.dbo.VehicleMarkDbo;
+import com.tms.speeding.domain.dbo.VehicleModelDbo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class VehicleMarkDboTest {
+class VehicleMarkRepositoryTest {
 
     @Autowired
     private VehicleMarkRepository repo;
@@ -30,7 +31,7 @@ class VehicleMarkDboTest {
     }
 
     @Test
-    public void createVehicleMarkTest() {
+    public void shouldPassedIfVehicleMarkCreatingIsSuccessful() {
         repo.save(this.vehicleMark);
 
         Optional<VehicleMarkDbo> findingMark = repo.findById(this.vehicleMark.getId());
@@ -42,7 +43,7 @@ class VehicleMarkDboTest {
     }
 
     @Test
-    public void setModelsToMarkTest() {
+    public void shouldPassedIfSettingModelsToMarkIsSuccessful() {
         VehicleModelDbo firstTestModel = new VehicleModelDbo("A8", this.vehicleMark);
         VehicleModelDbo secondTestModel = new VehicleModelDbo("A6", this.vehicleMark);
 
@@ -71,7 +72,7 @@ class VehicleMarkDboTest {
     }
 
     @Test
-    public void deleteMarkTest() {
+    public void shouldPassedIfDeletingVehicleMarkIsSuccessful() {
         repo.save(this.vehicleMark);
 
         repo.delete(this.vehicleMark);
@@ -79,6 +80,4 @@ class VehicleMarkDboTest {
         Optional<VehicleMarkDbo> findingMark = repo.findById(this.vehicleMark.getId());
         findingMark.ifPresent(vehicleMarkDbo -> assertThat(vehicleMarkDbo).isNotEqualTo(this.vehicleMark));
     }
-
-
 }

@@ -1,6 +1,7 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.PersonRepository;
+import com.tms.speeding.domain.dbo.LicenseDbo;
+import com.tms.speeding.domain.dbo.PersonDbo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class LicenseDboTest {
+class LicenseEntityFromPersonRepositoryTest {
     @Autowired
     private PersonRepository repo;
 
@@ -35,7 +36,7 @@ class LicenseDboTest {
     }
 
     @Test
-    public void createLicense() {
+    public void createLicenseTest() {
         repo.save(licenseOwner);
 
         Optional<PersonDbo> findingPerson = repo.findById(this.licenseOwner.getId());
@@ -56,7 +57,7 @@ class LicenseDboTest {
     }
 
     @Test
-    public void setLicenseProperties() {
+    public void shouldPassedIfSettingLicensePropertiesIsSuccessful() {
 
         this.license.setRevoked(true);
         this.license.setLastRevocation(new Date());
@@ -77,7 +78,7 @@ class LicenseDboTest {
     }
 
     @Test
-    public void updateLicense() {
+    public void shouldPassedIfWillSuccessfullyUpdatedLicensePropertiesTest() {
         repo.save(licenseOwner);
 
         Optional<PersonDbo> findingPerson = repo.findById(licenseOwner.getId());

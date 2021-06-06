@@ -1,6 +1,6 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.ViolationRepository;
+import com.tms.speeding.domain.dbo.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.lang.management.OperatingSystemMXBean;
 import java.util.Date;
 import java.util.Optional;
 
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ViolationDboTest {
+class ViolationRepositoryTest {
     @Autowired
     private ViolationRepository repo;
 
@@ -41,7 +40,7 @@ class ViolationDboTest {
     }
 
     @Test
-    public void createViolation() {
+    public void shouldPassedIfCreatingOfViolationsIsSuccessful() {
         repo.save(this.violation);
 
         Optional<ViolationDbo> findingViolation = repo.findById(this.violation.getId());
@@ -60,7 +59,7 @@ class ViolationDboTest {
     }
 
     @Test
-    public void setRegionTest() {
+    public void shouldPassedIfSettingRegionInViolationIsSuccessful() {
         RegionDbo region = new RegionDbo("CurrentRegion");
 
         this.violation.setRegion(region);
@@ -76,7 +75,7 @@ class ViolationDboTest {
     }
 
     @Test
-    public void updateViolationTest() {
+    public void shouldPassedIfUpdatingViolationDataIsSuccessful() {
         repo.save(this.violation);
 
         Optional<ViolationDbo> findingViolation = repo.findById(this.violation.getId());
@@ -108,5 +107,4 @@ class ViolationDboTest {
             assertNotNull(updatedViolationDbo.getNote());
         }
     }
-
 }

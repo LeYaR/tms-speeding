@@ -1,6 +1,8 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.VehicleModelRepository;
+import com.tms.speeding.domain.dbo.VehicleDbo;
+import com.tms.speeding.domain.dbo.VehicleMarkDbo;
+import com.tms.speeding.domain.dbo.VehicleModelDbo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class VehicleModelDboTest {
+class VehicleModelRepositoryTest {
     @Autowired
     private VehicleModelRepository repo;
     @Autowired
@@ -39,7 +41,7 @@ class VehicleModelDboTest {
     }
 
     @Test
-    public void createModelTest() {
+    public void shouldPassedIfCreatingVehicleModelIsSuccessful() {
         repo.save(this.model);
 
         Optional<VehicleModelDbo> findingModel = repo.findById(this.model.getId());
@@ -50,7 +52,7 @@ class VehicleModelDboTest {
     }
 
     @Test
-    public void setVehiclesTest() {
+    public void shouldPassedIfSettingVehiclesToVehicleModelsIsSuccessful() {
         List<VehicleDbo> vehicleList = new ArrayList<>();
         vehicleList.add(new VehicleDbo("testRegNumb1", "testVin1"));
         vehicleList.add(new VehicleDbo("testRegNumb2", "testVin2"));
@@ -76,7 +78,7 @@ class VehicleModelDboTest {
     }
 
     @Test
-    public void setMarkTest() {
+    public void shouldPassedIfSettingMarkToModelIsSuccessful() {
         VehicleMarkDbo mark = entityManager.persist(new VehicleMarkDbo("AudiX"));
         this.model.setMark(mark);
 
@@ -88,7 +90,7 @@ class VehicleModelDboTest {
     }
 
     @Test
-    public void addNewModelTest() {
+    public void shouldPassedIfAddingNewModelIsSuccessful() {
         repo.save(this.model);
 
         VehicleMarkDbo mark = entityManager.persist(new VehicleMarkDbo("BMW"));
@@ -120,14 +122,11 @@ class VehicleModelDboTest {
     }
 
     @Test
-    public void setIdFailTest() {
+    public void shouldPassedIfSettingIdIsNotSuccessful() {
         this.model.setId(228);
         repo.save(this.model);
 
         Optional<VehicleModelDbo> findingModel = repo.findByTitle(this.model.getTitle());
         findingModel.ifPresent(vehicleModelDbo -> assertThat(vehicleModelDbo.getId()).isNotEqualTo(228));
-
-
     }
-
 }

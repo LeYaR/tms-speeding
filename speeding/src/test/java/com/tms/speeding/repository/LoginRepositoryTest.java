@@ -1,6 +1,6 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.LoginRepository;
+import com.tms.speeding.domain.dbo.LoginDbo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class LoginDboTest {
+class LoginRepositoryTest {
     @Autowired
     private LoginRepository repo;
 
@@ -28,7 +28,7 @@ class LoginDboTest {
     }
 
     @Test
-    public void createAccountTest() {
+    public void shouldPassedIfAccountCreatingIsSuccessful() {
 
         Optional<LoginDbo> optionalFindingAccount = this.repo.findById(this.testAccount.getId());
 
@@ -44,7 +44,7 @@ class LoginDboTest {
     }
 
     @Test
-    public void updateAccountPropertiesTest() {
+    public void shouldPassedIfAccountPropertiesUpdatingIsSuccessful() {
 
         Optional<LoginDbo> optionalFindingAccount = this.repo.findById(this.testAccount.getId());
         LoginDbo findingAccount = null;
@@ -75,7 +75,7 @@ class LoginDboTest {
     }
 
     @Test
-    public void deleteAccountTest() {
+    public void shouldPassedIfAccountDeletingIsSuccessful() {
         repo.delete(this.testAccount);
 
         Optional<LoginDbo> findingAccount = repo.findById(this.testAccount.getId());

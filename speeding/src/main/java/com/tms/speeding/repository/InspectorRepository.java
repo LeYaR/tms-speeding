@@ -1,5 +1,6 @@
 package com.tms.speeding.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.tms.speeding.domain.dbo.InspectorDbo;
@@ -31,7 +32,7 @@ public interface InspectorRepository extends PagingAndSortingRepository<Inspecto
                         + " or i.id = ?#{#inspector.id}";
 
     @Query(value = "select a.*" + QUERY_BASE, nativeQuery = true)
-    Iterable<InspectorDbo> findByAll(String search);
+    List<InspectorDbo> findByAll(String search);
 
     @Query(value = "select count(1)" + QUERY_BASE, nativeQuery = true)
     long countBySearch(String search);

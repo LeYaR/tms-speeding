@@ -1,6 +1,6 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.InspectorRepository;
+import com.tms.speeding.domain.dbo.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class InspectorDboTest {
+class InspectorRepositoryTest {
 
     @Autowired
     private InspectorRepository repo;
@@ -33,7 +33,7 @@ class InspectorDboTest {
     }
 
     @Test
-    public void createInspectorTest() {
+    public void shouldPassedIfCreatingInspectorsWasSuccessful() {
         this.testInspector.setBadgeNumber("badge");
         repo.save(this.testInspector);
 
@@ -47,7 +47,7 @@ class InspectorDboTest {
     }
 
     @Test
-    public void setDepartmentToInspectorTest() {
+    public void shouldPassedIfSettingDepartmentToInspectorIsSuccessful() {
         DepartmentDbo department = new DepartmentDbo();
         department.setTitle("TestTitle");
         this.testInspector.setDepartment(department);
@@ -60,7 +60,7 @@ class InspectorDboTest {
     }
 
     @Test
-    public void setInspectorRankTest() {
+    public void shouldPassedIfSettingInspectorRankIsSuccessful() {
         RankDbo rank = new RankDbo("Mayor");
         this.testInspector.setRank(rank);
 
@@ -74,7 +74,7 @@ class InspectorDboTest {
     }
 
     @Test
-    public void setViolationToInspectorTest() {
+    public void shouldPassedIfSettingViolationToInspectorIsSuccessful() {
         ViolationDbo violation = new ViolationDbo(new Date(), 10, 20,
                 new PersonDbo("Name", "Surname", new Date()),
                 new VehicleDbo("228", "test"), this.testInspector);
@@ -93,7 +93,7 @@ class InspectorDboTest {
     }
 
     @Test
-    public void deleteInspectorTest() {
+    public void shouldPassedIfInspectorDeletingIsSuccessful() {
         repo.save(this.testInspector);
         repo.delete(this.testInspector);
 

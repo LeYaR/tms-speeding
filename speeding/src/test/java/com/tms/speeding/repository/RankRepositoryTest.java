@@ -1,12 +1,13 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.RankRepository;
+import com.tms.speeding.domain.dbo.InspectorDbo;
+import com.tms.speeding.domain.dbo.PersonDbo;
+import com.tms.speeding.domain.dbo.RankDbo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.relational.core.sql.In;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class RankDboTest {
+class RankRepositoryTest {
 
     @Autowired
     private RankRepository repo;
@@ -32,7 +33,7 @@ class RankDboTest {
     }
 
     @Test
-    public void createRankTest() {
+    public void shouldPassedIfRankCreatingIsSuccessful() {
         repo.save(this.rank);
 
         Optional<RankDbo> findingRank = repo.findById(this.rank.getId());
@@ -45,7 +46,7 @@ class RankDboTest {
     }
 
     @Test
-    public void addInspectorListTest() {
+    public void shouldPassedIfSettingInspectorListToOneRankIsSuccessful() {
         InspectorDbo firstInspectorWithThisRank = new InspectorDbo(
                 new PersonDbo("First", "Surname1", new Date()));
         InspectorDbo secondInspectorWithThisRank = new InspectorDbo(
@@ -76,14 +77,12 @@ class RankDboTest {
     }
 
     @Test
-    public void deleteRankTest() {
+    public void shouldPassedIfRankDeletingIsSuccessful() {
         repo.save(this.rank);
 
         repo.deleteById(this.rank.getId());
 
         Optional<RankDbo> findingRank = repo.findByTitle(this.rank.getTitle());
         findingRank.ifPresent(rankDbo -> assertThat(rankDbo).isNotEqualTo(this.rank));
-
     }
-
 }

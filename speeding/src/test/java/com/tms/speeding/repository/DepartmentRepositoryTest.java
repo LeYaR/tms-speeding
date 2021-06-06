@@ -1,13 +1,13 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.DepartmentRepository;
-import org.aspectj.lang.annotation.Before;
+import com.tms.speeding.domain.dbo.DepartmentDbo;
+import com.tms.speeding.domain.dbo.InspectorDbo;
+import com.tms.speeding.domain.dbo.PersonDbo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class DepartmentDboTest {
+class DepartmentRepositoryTest {
 
     @Autowired
     private DepartmentRepository repo;
@@ -32,14 +32,16 @@ class DepartmentDboTest {
     }
 
     @Test
-    public void createDepartmentTest() {
+    public void assertNotNullIfSuccessfulSaveCountryTest() {
         this.testDepartment.setTitle("NewTestTitleDepartment");
+
         DepartmentDbo testDep = repo.save(this.testDepartment);
+
         assertNotNull(testDep);
     }
 
     @Test
-    public void findDepartmentByTitle() {
+    public void shouldPassedIfFindingDepartmentByTitleWasSuccessful() {
         repo.save(this.testDepartment);
 
         DepartmentDbo findingDepartment = repo.findByTitle(this.testDepartment.getTitle());
@@ -50,7 +52,7 @@ class DepartmentDboTest {
     }
 
     @Test
-    public void setAddressInDepartmentTest() {
+    public void shouldPassedIfSettingDepartmentAddressIsSuccessful() {
         this.testDepartment.setAddress("TestAddress");
         repo.save(this.testDepartment);
 
@@ -63,7 +65,7 @@ class DepartmentDboTest {
     }
 
     @Test
-    public void setInspectorsInDepartmentTest() {
+    public void shouldPassedIfAddingInspectorToDepartmentIsSuccessful() {
 
         InspectorDbo inspector = new InspectorDbo(new PersonDbo("Name", "Surname", new Date()));
 
@@ -83,7 +85,7 @@ class DepartmentDboTest {
     }
 
     @Test
-    public void deleteDepartmentTest() {
+    public void shouldPassedIfDeletingDepartmentIsSuccessful() {
         repo.save(this.testDepartment);
         repo.delete(this.testDepartment);
 
@@ -91,5 +93,4 @@ class DepartmentDboTest {
 
         assertNull(findingDepartment);
     }
-
 }

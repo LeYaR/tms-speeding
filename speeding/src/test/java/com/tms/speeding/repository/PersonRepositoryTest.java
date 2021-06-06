@@ -1,12 +1,11 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.PersonRepository;
+import com.tms.speeding.domain.dbo.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.relational.core.sql.In;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,12 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.in;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class PersonDboTest {
+class PersonRepositoryTest {
 
     @Autowired
     private PersonRepository repo;
@@ -32,7 +29,7 @@ class PersonDboTest {
     }
 
     @Test
-    public void createPersonTest() {
+    public void shouldPassedIfPersonCreatingIsSuccessful() {
         this.testPerson.setPersonalNumber("123");
         this.testPerson.setMiddleName("testMiddleName");
         this.testPerson.setBornDate(new Date());
@@ -50,7 +47,7 @@ class PersonDboTest {
     }
 
     @Test
-    public void addInspectorToPersonTest() {
+    public void shouldPassedIfSettingInspectorIsSuccessful() {
         InspectorDbo inspector = new InspectorDbo(new PersonDbo("Inspector", "Warnike", new Date()));
         inspector.setPerson(this.testPerson);
         this.testPerson.setInspector(inspector);
@@ -63,7 +60,7 @@ class PersonDboTest {
     }
 
     @Test
-    public void addLicenseToPersonTest() {
+    public void shouldPassedIfSettingLicenseToPersonIsSuccessful() {
         LicenseDbo license = new LicenseDbo(this.testPerson, new Date(), new Date());
         this.testPerson.setLicense(license);
 
@@ -74,7 +71,7 @@ class PersonDboTest {
     }
 
     @Test
-    public void addViolationsTest() {
+    public void shouldPassedIfSettingViolationsToPersonIsSuccessful() {
         ViolationDbo violation = new ViolationDbo(new Date(), 20, 30, this.testPerson,
                 new VehicleDbo("tst", "test"),
                 new InspectorDbo(new PersonDbo("Inspector", "Surname", new Date())));
@@ -91,7 +88,7 @@ class PersonDboTest {
     }
 
     @Test
-    public void updatePersonTest() {
+    public void shouldPassedIfWillUpdatedPersonPropertiesTest() {
         repo.save(this.testPerson);
 
         Optional<PersonDbo> findingPerson = repo.findById(this.testPerson.getId());
@@ -122,7 +119,7 @@ class PersonDboTest {
     }
 
     @Test
-    public void deletePersonTest() {
+    public void shouldPassedIfPersonDeletingWillSuccessfullyTest() {
         repo.save(this.testPerson);
 
         repo.delete(this.testPerson);

@@ -1,6 +1,6 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
-import com.tms.speeding.repository.RegionRepository;
+import com.tms.speeding.domain.dbo.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class RegionDboTest {
+class RegionRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -38,7 +38,7 @@ class RegionDboTest {
     }
 
     @Test
-    public void createRegionTest() {
+    public void shouldPassedIfRegionCreatingIsSuccessful() {
         repo.save(this.region);
         assertThat(this.region).isNotNull();
         assertThat(this.region.getId()).isGreaterThan(0);
@@ -46,7 +46,7 @@ class RegionDboTest {
     }
 
     @Test
-    public void addVehiclesInRegionTest() {
+    public void shouldPassedIfSettingOfVehicleListToRegionIsSuccessful() {
         repo.save(this.region);
         this.region.setTitle("Midgaard");
         this.region.setCountry(this.country);
@@ -64,7 +64,7 @@ class RegionDboTest {
     }
 
     @Test
-    public void addViolationsInRegionTest() {
+    public void shouldPassedIfSettingViolationListToRegionIsSuccessful() {
 
         VehicleDbo vehicle = new VehicleDbo("test", "test");
         List<VehicleDbo> vehicleList = new ArrayList<>();
@@ -88,8 +88,8 @@ class RegionDboTest {
     }
 
     @Test
-    public void deleteRegionTest() {
-
+    public void shouldPassedIfDeletingRegionIsSuccessful() {
+        repo.save(this.region);
         repo.delete(this.region);
         assertNull(repo.findByTitle("test"));
     }

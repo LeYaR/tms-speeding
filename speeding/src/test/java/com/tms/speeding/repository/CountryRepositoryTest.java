@@ -1,7 +1,8 @@
-package com.tms.speeding.domain.dbo;
+package com.tms.speeding.repository;
 
 
-import com.tms.speeding.repository.CountryRepository;
+import com.tms.speeding.domain.dbo.CountryDbo;
+import com.tms.speeding.domain.dbo.RegionDbo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,13 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class CountryDboTest {
+class CountryRepositoryTest {
 
     @Autowired
     private CountryRepository repo;
 
     @Test
-    public void createCountryTest() {
+    public void shouldPassedIfCreatingCountryIsSuccessful() {
         CountryDbo country = new CountryDbo("Test", "tst");
         CountryDbo savedCountry = repo.save(country);
 
@@ -30,7 +31,7 @@ class CountryDboTest {
     }
 
     @Test
-    public void addRegionsTest() {
+    public void shouldAssertIfFindingRegionIsEqualToPreSaveRegion() {
         CountryDbo country = new CountryDbo("Test", "tst");
         RegionDbo region = new RegionDbo("Test");
         region.setCountry(country);
@@ -47,7 +48,7 @@ class CountryDboTest {
     }
 
     @Test
-    public void findNonExistingCountryTest() {
+    public void shouldAssertIfNonExistentCountryFindingReturnNull() {
         String title = "BigBrotherIsWatchingYou";
         CountryDbo nonExistentCountry = repo.findByTitle(title);
 
@@ -55,7 +56,7 @@ class CountryDboTest {
     }
 
     @Test
-    public void findExistingCountryTest() {
+    public void shouldAssertSuccessfulSaveAndIsoEquals() {
         String title = "Osterreich";
         CountryDbo country = new CountryDbo(title, null);
         country.setIso("OST");
@@ -63,11 +64,11 @@ class CountryDboTest {
 
         CountryDbo existentCountry = repo.findByTitle(title);
 
-        assertThat(existentCountry.getTitle()).isEqualTo(title);
+        assertThat(existentCountry.getIso()).isEqualTo("OST");
     }
 
     @Test
-    public void countryListIsGreaterThanNullTest() {
+    public void assertTrueIfCountryListIsGreaterThanNull() {
         CountryDbo country = new CountryDbo();
         country.setTitle("Osterriech");
         country.setIso("OST");
@@ -78,7 +79,7 @@ class CountryDboTest {
     }
 
     @Test
-    public void deleteCountryTest() {
+    public void shouldPassedIfDeletingCountryWasSuccessful() {
         List<CountryDbo> countries = (List<CountryDbo>) repo.findAll();
         Integer id;
         if (countries.isEmpty()) {
