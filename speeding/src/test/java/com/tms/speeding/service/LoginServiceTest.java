@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -37,9 +38,13 @@ class LoginServiceTest {
     @MockBean
     private EntityManager entityManager;
 
-    private LoginService service;
     @MockBean
-    TypedQuery<LoginDbo> q;
+    private TypedQuery<LoginDbo> q;
+
+    @MockBean
+    private LoginDbo user;
+
+    private LoginService service;
 
     @BeforeEach
     public void setUp() {
@@ -51,10 +56,6 @@ class LoginServiceTest {
 
         String login = "login";
         String password = "password";
-
-        LoginDbo user = new LoginDbo();
-        user.setLogin(login);
-        user.setPassword(password);
 
         Mockito.when(repo.save(any(LoginDbo.class))).thenReturn(user);
 
@@ -77,18 +78,13 @@ class LoginServiceTest {
         String login = "login";
         String password = "incorrectPassword";
 
-        LoginDbo user = new LoginDbo();
-        user.setLogin(login);
-        user.setPassword(password);
-
         Mockito.when(repo.save(any(LoginDbo.class))).thenReturn(user);
 
         ResponseObject successfulResponse = new ResponseObject();
 
-
         Mockito.when(entityManager.createQuery(LoginService.QUERY_C, LoginDbo.class)).thenReturn(q);
         Mockito.when(q.setParameter(anyString(), any())).thenReturn(q);
-        Mockito.when(q.getResultList()).thenReturn(new ArrayList<LoginDbo>());
+        Mockito.when(q.getResultList()).thenReturn(new ArrayList<>());
 
         ResponseObject logInResponse = service.logIn(login, password);
 
@@ -104,9 +100,6 @@ class LoginServiceTest {
         String login = "login";
         String password = "password";
 
-        LoginDbo user = new LoginDbo();
-        user.setLogin(login);
-        user.setPassword(password);
 
         String query = "select p from LoginDbo p where lower(:login) = lower(:login)";
 
@@ -128,10 +121,6 @@ class LoginServiceTest {
 
         String login = "login";
         String password = "password";
-
-        LoginDbo user = new LoginDbo();
-        user.setLogin(login);
-        user.setPassword(password);
 
         String query = "select p from LoginDbo p where lower(:login) = lower(:login)";
 

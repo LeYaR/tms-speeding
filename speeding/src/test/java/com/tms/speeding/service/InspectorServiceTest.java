@@ -10,18 +10,18 @@ import com.tms.speeding.repository.DepartmentRepository;
 import com.tms.speeding.repository.InspectorRepository;
 import com.tms.speeding.repository.PersonRepository;
 import com.tms.speeding.repository.RankRepository;
-import com.tms.speeding.util.ResponseObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -34,45 +34,32 @@ class InspectorServiceTest {
     private InspectorRepository repository;
 
     @MockBean
-    private PersonRepository pRepository;
+    private PersonRepository personRepository;
 
     @MockBean
-    private RankRepository rRepository;
-
-    @MockBean
-    private DepartmentRepository dRepository;
-
-    @Autowired
     private InspectorMapper mapper;
 
     @MockBean
-    private PersonMapper pMapper;
+    private DepartmentRepository departmentRepository;
+
+    @MockBean
+    private RankRepository rankRepository;
+
+    @MockBean
+    private PersonMapper personMapper;
+
 
     private InspectorService service;
-    private InspectorDto inspectorDto;
-    private InspectorDbo inspectorDbo;
 
     @BeforeEach
     public void setUp() {
-        service = new InspectorService(repository, pRepository, mapper, rRepository, dRepository, pMapper);
-        PersonDbo injectingPerson = new PersonDbo("Firstname", "Lastname", new Date());
-        PersonDto injectingPersonDto = new PersonDto();
-
-        injectingPersonDto.setBornDate(injectingPerson.getBornDate());
-        injectingPersonDto.setFirstName("Firstname");
-        injectingPersonDto.setLastName("Lastname");
-
-        inspectorDbo = new InspectorDbo(injectingPerson);
-        inspectorDbo.setId(228);
-
-        inspectorDto = new InspectorDto();
-        inspectorDto.setId(228);
-        inspectorDto.setPerson(injectingPersonDto);
+        service = new InspectorService(repository, personRepository, mapper,
+                rankRepository, departmentRepository, personMapper);
     }
 
     @Test
     public void shouldFindByIdSuccessfullyTest() {
-        Mockito.when(repository.findById(228)).thenReturn(Optional.of(new InspectorDbo()));
+        Mockito.when(repository.findById(228)).thenReturn(Optional.of(Mockito.mock(InspectorDbo.class)));
 
         service.getById(228);
 
@@ -80,50 +67,51 @@ class InspectorServiceTest {
     }
 
     @Test
-    public void findingEntitiesShouldBeEqualsTest() {
+    public void assertNotNullGettedFromServiceByIdResult() {
+
+        var inspectorDbo = Mockito.mock(InspectorDbo.class);
+
         Mockito.when(repository.findById(228)).thenReturn(Optional.of(inspectorDbo));
-        InspectorDto findingInspector = service.getById(228);
+        Mockito.when(mapper.toDto(any(InspectorDbo.class))).thenReturn(Mockito.mock(InspectorDto.class));
+        var result = service.getById(228);
 
-        boolean result = ((Objects.equals(findingInspector.getId(), inspectorDto.getId())) &&
-                Objects.equals(findingInspector.getPerson().getFirstName(), inspectorDto.getPerson().getFirstName()) &&
-                Objects.equals(findingInspector.getPerson().getLastName(), inspectorDto.getPerson().getLastName()));
-
-        assertTrue(result);
+        assertNotNull(result);
     }
 
     @Test
-    public void shouldSuccessfullySaveInspectorEntityTest() {
-        PersonDbo injectingPersonDbo = new PersonDbo("Firstname", "Lastname", new Date());
+    public void shouldPassedIfSavingInspectorsEntityIsSuccessful() {
 
-        InspectorDbo inspectorDbo = new InspectorDbo(injectingPersonDbo);
-        inspectorDbo.setId(228);
-        inspectorDbo.setBadgeNumber("nmbr");
+        InspectorDto inspectorDto = Mockito.mock(InspectorDto.class);
+        PersonDbo personDbo = Mockito.mock(PersonDbo.class);
+        PersonDto personDto = Mockito.mock(PersonDto.class);
 
-        InspectorDto sourceInspector = mapper.toDto(inspectorDbo);
 
-        Mockito.when(pRepository.findByAll(sourceInspector.getPerson())).thenReturn(Optional.of(injectingPersonDbo));
+        Mockito.when(repository.findByAll(any(InspectorDto.class))).thenReturn(Optional.empty());
+        Mockito.when(personRepository.findByAll(personDto)).thenReturn(Optional.of(personDbo));
 
-        service.save(sourceInspector);
+        Mockito.when(inspectorDto.getId()).thenReturn(1);
+        Mockito.when(inspectorDto.getBadgeNumber()).thenReturn("stringResponse");
+        Mockito.when(inspectorDto.getPerson()).thenReturn(personDto);
+        Mockito.when(inspectorDto.getRank()).thenReturn(null);
+        Mockito.when(inspectorDto.getDepartment()).thenReturn(null);
+
+        Mockito.when(personDbo.getId()).thenReturn(1);
+
+        var response = service.save(inspectorDto);
 
         verify(repository, times(1)).save(any());
+        assertTrue(response.isSuccess());
     }
 
     @Test
-    public void shouldAssertEqualsAllGettedInspectorsByStringQueryTest() {
-        List<InspectorDbo> inspectorList = new ArrayList<>();
-        inspectorList.add(inspectorDbo);
+    public void shouldPassedIfSuccessfullyReturnsStringQuery() {
+        InspectorDbo inspectorDbo = Mockito.mock(InspectorDbo.class);
 
-        when(repository.findByAll("query")).thenReturn(inspectorList);
+        when(repository.findByAll("query")).thenReturn(List.of(inspectorDbo));
 
-        ResponseObject response = service.getAllByString("query");
-        HashMap<String, ArrayList<InspectorDto>> responseData =
-                (HashMap<String, ArrayList<InspectorDto>>) response.getData();
-
-        InspectorDto findingInspector = responseData.get("list").get(0);
-        boolean result = (Objects.equals(inspectorDbo.getId(), findingInspector.getId()) &&
-                Objects.equals(inspectorDbo.getPerson().getFirstName(), findingInspector.getPerson().getFirstName()));
+        var response = service.getAllByString("query");
 
         verify(repository, times(1)).findByAll(anyString());
-        assertTrue(result);
+        assertTrue(response.isSuccess());
     }
 }

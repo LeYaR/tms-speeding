@@ -23,6 +23,4 @@ public class CountryDto {
     public void setIso(String iso) {
         this.iso = iso;
     }
-
-    
 }
