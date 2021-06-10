@@ -101,7 +101,7 @@ class LoginServiceTest {
         String password = "password";
 
 
-        String query = "select p from LoginDbo p where lower(:login) = lower(:login)";
+        String query = "select p from LoginDbo p where lower(login) = lower(:login)";
 
         Mockito.when(entityManager.createQuery(query, LoginDbo.class)).thenReturn(q);
         Mockito.when(q.setParameter(anyString(), any())).thenReturn(q);
@@ -122,7 +122,7 @@ class LoginServiceTest {
         String login = "login";
         String password = "password";
 
-        String query = "select p from LoginDbo p where lower(:login) = lower(:login)";
+        String query = "select p from LoginDbo p where lower(login) = lower(:login)";
 
         Mockito.when(entityManager.createQuery(query, LoginDbo.class)).thenReturn(q);
         Mockito.when(q.setParameter(anyString(), any())).thenReturn(q);

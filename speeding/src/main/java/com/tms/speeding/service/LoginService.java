@@ -60,7 +60,7 @@ public class LoginService {
     }
 
     public LoginDbo findExisting(String login) {
-        TypedQuery<LoginDbo> query = entityManager.createQuery("select p from LoginDbo p where lower(:login) = lower(:login)", LoginDbo.class);
+        TypedQuery<LoginDbo> query = entityManager.createQuery("select p from LoginDbo p where lower(login) = lower(:login)", LoginDbo.class);
         query.setParameter("login", login).setMaxResults(1);
         return query.getResultList().isEmpty() ? null : query.getSingleResult();
     }
